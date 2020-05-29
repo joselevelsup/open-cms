@@ -1,0 +1,156 @@
+import * as React from "react";
+import { RouteProps, Link } from "react-router-dom";
+import { CmsRoute } from "../app";
+import { componentList } from "../util";
+import RenderComponent from "./render-component";
+import axios, { AxiosResponse, AxiosError } from "axios";
+import "../styles/index.scss";
+
+interface CmsPageProps extends RouteProps {
+	otherRoutes: [CmsRoute],
+	apiRoute: string
+}
+
+interface CmsPageState {
+	componentsForThisPage: any[];
+}
+
+export default class CmsPage extends React.Component<CmsPageProps, CmsPageState> {
+
+	state = {
+		componentsForThisPage: []
+	}
+
+	addComponentToList = (slug: string): void => {
+		this.setState(state => {
+			const currentComponents = [...state.componentsForThisPage];
+			currentComponents.push({
+				[`${slug}-${currentComponents.length+1}`]: {
+					title: "",
+					value: ""
+				}
+			});
+
+			return {
+				componentsForThisPage: currentComponents
+			};
+		})
+	}
+
+	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement>, slug: string, attr: string): void => {
+		const val = e.target;
+		this.setState(state => {
+			const currentComponents = [...state.componentsForThisPage];
+			const slugIndex = currentComponents.findIndex(s => {
+				const sl = Object.keys(s)[0];
+				return slug == sl;
+			});
+
+			currentComponents[slugIndex] = {
+				[slug]: {
+					...currentComponents[slugIndex][slug],
+					[attr]: val.value
+				}
+			};
+
+
+			return {
+				componentsForThisPage: currentComponents
+			};
+		});
+	}
+	
+
+
+	removeComponent = (slug: string): void => {
+		this.setState(state => {
+			const currentComponents = [...state.componentsForThisPage];
+			const newSetComponents = currentComponents.filter(s => {
+				const sl = Object.keys(s)[0];
+
+				return slug != sl;
+			});
+
+			return {
+				componentsForThisPage: newSetComponents
+			}
+		});	
+	}
+
+	saveCmsData = (): void => {
+		const { componentsForThisPage } = this.state;
+		const data = componentsForThisPage.map(c => {
+			let key = Object.keys(c)[0];
+			let spl: string[] = key.split("-");
+			const typeOfComponent: string = `${spl[0]}-${spl[1]}`;
+			let componentData = {
+				title: c[key].title,
+				value: c[key].value,
+				type: typeOfComponent
+			};
+
+			return componentData;
+		});
+
+		console.log(data);
+		/* axios.put(this.props.apiRoute, data).then((data: AxiosResponse) => { */
+		/* 	console.log(data); */
+		/* }).catch((err: AxiosError) => { */
+		/* 	console.log(err); */
+		/* }) */	
+	}
+
+	render(){
+		const { otherRoutes } = this.props;
+		const { componentsForThisPage } = this.state;
+		return (
+			<div className="cms-page">
+				<div className="cms-header">
+					{
+						otherRoutes.map((r: any, i: number) => (
+							<div key={i} className="route-link">
+								<Link to={`/admin/${r.name}`}>
+									{r.name}
+								</Link>
+							</div>
+						))
+					}
+				</div>
+				<br />
+				<div className="cms-page-options">
+					<button className="cms-option danger">
+						Cancel
+					</button>
+					<button onClick={() => this.saveCmsData()} className="cms-option success">
+						Save Changes
+					</button>
+				</div>
+				<div className="cms-body">
+					<div className="components">
+						<ul>
+							{
+								componentList.map((c: any, i: number) => (
+									<li key={i}>
+										<p>
+											{c.name}
+										</p>
+										<button onClick={() => this.addComponentToList(c.slug)}>
+											+
+										</button>
+									</li>
+								))
+							}
+						</ul>
+					</div>
+					<div className="main">
+						{
+							componentsForThisPage.map((c: any, i: number) => (
+								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} />
+							))
+						}
+					</div>
+				</div>
+			</div>
+		);
+	}
+}

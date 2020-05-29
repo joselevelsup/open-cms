@@ -1,0 +1,132 @@
+$pageColor: #d4e4ff;
+$danger: #f6511dff;
+$warning: #ffb400ff;
+$secondary: #00a6edff;
+$success: #7fb800ff;
+$dark: #0d2c54ff;
+$boxShadowColor: #c2c6cc;
+
+body {
+	margin: 0;
+}
+.cms-page {
+	width: 100%;
+	height: 100%;
+	background-color: $pageColor;
+	.cms-header{
+		display: flex;
+		flex-direction: row;
+		flex: 1;
+		background-color: white;
+		padding: 6px 0;
+		.route-link {
+			padding: 13px 15px;
+			background-color: transparent;
+			a {
+				text-decoration: none;
+				text-transform: capitalize;
+				color: $dark;
+			}
+		}
+	}
+	.cms-page-options {
+		display: flex;
+		flex-direction: row-reverse;
+		background-color: white;
+		padding: 15px 10px;
+		margin: 0 5px;
+		box-shadow: 2px 1px 10px $boxShadowColor;
+		border-radius: 3px;
+		button.cms-option {
+			cursor: pointer;
+			margin-left: 10px;
+			padding: 14px 21px;
+			border: solid 2px transparent;
+			&.danger {
+				background-color: $danger;
+				border-color: $danger;
+			}
+
+			&.success {
+				background-color: $success;
+				border-color: $success;
+			}
+		}
+	}
+	.cms-body {
+		display: flex;
+		flex-direction: row;
+		margin: 10px 5px 0px 5px;
+		div {
+			padding: 8px;
+		}
+		.components {
+			flex-basis: 250px;
+			background-color: white;
+			ul {
+				list-style-type: none;
+				li {
+					display: flex;
+					flex-direction: row;
+					p {
+						margin: auto;
+					}
+					button {
+						padding: 3px;
+						margin: auto;
+					}
+				}
+			}
+		}
+		.main {
+			flex-grow: 1;
+			padding-top: 0;
+			padding-right: 0;
+			.component-container {
+				padding-top: 0;
+				padding-right: 0;
+				display: flex;
+				flex-direction: column;
+				.component-header {
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					background-color: white;
+					padding: 15px 10px;
+					flex-shrink: 1;
+					.component-title {
+						width: 30%;
+						height: 31px;
+						border: solid 1px $secondary;
+						border-radius: 3px;
+						padding: 0 10px;
+						margin-top: auto;
+					}
+					.delete-component {
+						cursor: pointer;
+						padding: 10px 17px;
+						border: solid 2px transparent;
+						background-color: $danger;
+						border-color: $danger;
+					}
+				}
+				.component {
+					padding-top: 0;
+					background-color: white;
+					.component-input {
+						width: 100%;
+						height: 31px;
+						border: solid 1px $secondary;
+						border-radius: 3px;
+						padding: 10px;
+
+						&.textarea {
+							height: 60px;
+							resize: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}
