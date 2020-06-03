@@ -83,8 +83,9 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			});
 
 			if(parent){
-				currentComponents[slugIndex][slug]["components"][childSlug] = {
-					...currentComponents[slugIndex][slugIndex]["components"][childSlug],
+				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s) => Object.keys(s)[0] == childSlug);
+				currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug] = {
+					...currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug],
 					[attr]: val.value
 				}
 			} else {

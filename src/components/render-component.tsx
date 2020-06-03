@@ -24,13 +24,13 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 	</div>
 )
 
-const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string) => {
+const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
 	const typeOfInput: string = splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
 	switch(typeOfInput){
 		case "short-text":
 			return (
-				<input name={`${slugKey}-value`} type="text" value={slug[slugKey].value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onCompTextChange(e, slugKey, "value")} className="component-input" />
+				<input name={`${slugKey}-value`} type="text" value={slug[slugKey].value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} className="component-input" />
 			);
 		case "long-text":
 			return (
@@ -72,7 +72,7 @@ export default function(props: ComponentProps){
 								return (
 									<>
 										<ComponentHeader name={`${thisSlugKey}-title`} value={c[thisSlugKey].title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title", true, thisSlugKey)} type={thisSlugKey} removeComponent={() => deleteComponent(slugKey, true, thisSlugKey)}/>
-										{renderActualComponent(c, changeComponentAttr, Object.keys(c)[0])}
+										{renderActualComponent(c, changeComponentAttr, thisSlugKey, true, slugKey)}
 									</>
 								)
 							})
