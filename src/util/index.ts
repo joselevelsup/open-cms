@@ -6,5 +6,17 @@ export const componentList = [
 	{
 		name: "long text",
 		slug: "long-text"
+	}, 
+	{
+		name: "nested",
+		slug: "nested"
+	},
+	{
+		name: "media",
+		slug: "media"
+	},
+	{
+		name: "link",
+		slug: "link"
 	}
 ];
