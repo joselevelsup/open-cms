@@ -126,6 +126,17 @@ body {
 						}
 					}
 				}
+
+				.link-container {
+					display: flex;
+					flex-direction: row;
+					input {
+						width: 85%;
+					}
+					a {
+						margin-top: auto; //work on centering text vertically
+					}
+				}
 			}
 		}
 	}

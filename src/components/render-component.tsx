@@ -1,9 +1,12 @@
 import * as React from "react";
+import { componentList, firstObjectKey } from "../util";
 
 interface ComponentProps {
 	slug: any;
 	changeComponentAttr(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, slug: string, attr: string, parent?: boolean, childSlug?: string): void;
 	deleteComponent(slug: string, parent?: boolean, childSlug?: string): void;
+	addNestedComponent(slugKey: string): void;
+	changeNestedComponent(e: React.ChangeEvent<HTMLSelectElement>, slugKey: string, oldComponent: string): void;
 }
 
 interface ComponentHeaderProps {
@@ -11,18 +14,46 @@ interface ComponentHeaderProps {
 	value: string;
 	onChange(e: React.ChangeEvent<HTMLInputElement>): void;
 	removeComponent(): void
-	type: string
+	type: string;
+	changeComponent?(e: React.ChangeEvent<HTMLSelectElement>): void;
+	changeAvailable?: boolean;
 }
 
-const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange, removeComponent, type }) => (
-	<div className="component-header">
-		{
-			!type.includes("nested") &&
-			<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" />
-		}
-		<button className="delete-component" onClick={removeComponent}>Delete</button>
-	</div>
-)
+const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange, removeComponent, type, changeComponent, changeAvailable }) => {
+	const [ newComponentType, setNewComponentType ] = React.useState<string>("short-text");
+
+	const changeThisComponent = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setNewComponentType(e.target.value);
+		changeComponent(e);
+	}
+
+	return (
+		<div className="component-header">
+			{
+				!type.includes("nested") &&
+					<>
+						<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" />
+						{
+							changeAvailable &&
+							<select name="change-component" onChange={changeThisComponent} value={newComponentType}>
+								{
+									componentList.map(c => (
+										<>
+											{
+												c.name !== "nested" &&
+													<option value={c.slug}>{c.name}</option>
+											}
+										</>
+									))
+								}
+							</select>
+						}
+					</>
+			}
+			<button className="delete-component" onClick={removeComponent}>Delete</button>
+		</div>
+	)
+}
 
 const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
@@ -44,20 +75,33 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 			);
 		case "link": 
 			return (
-				<div className="link-container"></div>
+				<div className="link-container">
+					<input 
+						name={`${slugKey}-value`} 
+						type="text" 
+						value={slug[slugKey].value} 
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} 
+						className="component-input" 
+					/>
+					<a href={slug[slugKey].value}>Test this link</a>
+				</div>
 			)
 		default:
 			return <></>
 	}
 }
 
-export default function(props: ComponentProps){
-	const { changeComponentAttr, slug, deleteComponent } = props;
-	const slugKey: string = Object.keys(slug)[0];
-	console.log(slug);
+export default function({ changeComponentAttr, slug, deleteComponent, addNestedComponent, changeNestedComponent }: ComponentProps){
+	const slugKey: string = firstObjectKey(slug);
 	return (
 	<div className="component-container">
-		<ComponentHeader name={`${slugKey}-title`} value={slug[slugKey].title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title")} type={slugKey} removeComponent={() => deleteComponent(slugKey)} />
+		<ComponentHeader 
+			name={`${slugKey}-title`} 
+			value={slug[slugKey].title} 
+			onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title")} 
+			type={slugKey} 
+			removeComponent={() => deleteComponent(slugKey)} 
+		/>
 		<div className="component">
 			{
 				!slugKey.includes("nested") ?
@@ -68,15 +112,24 @@ export default function(props: ComponentProps){
 					<>
 						{
 							slug[slugKey].components.length >= 1 && slug[slugKey].components.map((c: any) => {
-								const thisSlugKey = Object.keys(c)[0];
+								const thisSlugKey = firstObjectKey(c);
 								return (
 									<>
-										<ComponentHeader name={`${thisSlugKey}-title`} value={c[thisSlugKey].title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title", true, thisSlugKey)} type={thisSlugKey} removeComponent={() => deleteComponent(slugKey, true, thisSlugKey)}/>
+										<ComponentHeader 
+											name={`${thisSlugKey}-title`} 
+											value={c[thisSlugKey].title} 
+											onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title", true, thisSlugKey)} 
+											type={thisSlugKey} 
+											removeComponent={() => deleteComponent(slugKey, true, thisSlugKey)} 
+											changeComponent={(e: React.ChangeEvent<HTMLSelectElement>) => changeNestedComponent(e, slugKey, thisSlugKey)}
+											changeAvailable={true}
+										/>
 										{renderActualComponent(c, changeComponentAttr, thisSlugKey, true, slugKey)}
 									</>
 								)
 							})
 						}
+						<button onClick={() => addNestedComponent(slugKey)} className="add-component">+ Add</button>
 					</>
 			}
 		</div>

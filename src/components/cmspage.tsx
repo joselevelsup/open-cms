@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteProps, Link } from "react-router-dom";
 import { CmsRoute } from "../app";
-import { componentList } from "../util";
+import { componentList, firstObjectKey } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import "../styles/index.scss";
@@ -78,12 +78,13 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
 			const slugIndex = currentComponents.findIndex((s: CmsComponent) => {
-				const sl = Object.keys(s)[0];
+				const sl = firstObjectKey(s);
 				return slug == sl;
 			});
 
 			if(parent){
-				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s) => Object.keys(s)[0] == childSlug);
+				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s) => firstObjectKey(s) == childSlug);
+
 				currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug] = {
 					...currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug],
 					[attr]: val.value
@@ -113,18 +114,16 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			let newSetComponents: any;
 			if(parent){
 				newSetComponents = currentComponents.map((cc: any) => {
-					if(slug == Object.keys(cc)[0]){
-						cc[slug].components = cc[slug].components.filter(c => childSlug != Object.keys(c)[0]);
+					if(slug == firstObjectKey(cc)){
+						cc[slug].components = cc[slug].components.filter((c: CmsComponent) => childSlug != firstObjectKey(c));
 						return cc;
 					}
 
 					return cc;
 				});
 			} else {
-				newSetComponents = currentComponents.filter((s: CmsComponent) => slug != Object.keys(s)[0]);
+				newSetComponents = currentComponents.filter((s: CmsComponent) => slug != firstObjectKey(s));
 			}
-
-			console.log(newSetComponents);
 
 			return {
 				componentsForThisPage: newSetComponents
@@ -135,7 +134,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	saveCmsData = (): void => {
 		const { componentsForThisPage } = this.state;
 		const data = componentsForThisPage.map((c: CmsComponent) => {
-			let key = Object.keys(c)[0];
+			let key = firstObjectKey(c);
 			let spl: string[] = key.split("-");
 			const typeOfComponent: string = `${spl[0]}-${spl[1]}`;
 			let componentData = {
@@ -154,10 +153,55 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})	
 	}
 
+	createNestedComponent = (nestedSlug: string): void => {
+		this.setState(state => {
+			const currentComponents = [...state.componentsForThisPage];
+
+			const nestedIndex = currentComponents.findIndex(c => nestedSlug == firstObjectKey(c));
+
+			currentComponents[nestedIndex][nestedSlug]["components"].push({
+				[`short-text-${currentComponents[nestedIndex][nestedSlug]["components"].length+1}`]: {
+					title: "",
+					value: ""
+				}
+			});
+
+			return {
+				componentsForThisPage: currentComponents
+			}
+
+		})
+	}
+
+	changeNestedComponent = (e: React.ChangeEvent<HTMLSelectElement>, nestedSlug: string, oldComponent: string) => {
+		const val = e.target;
+		this.setState(state => {
+			const currentComponents = [...state.componentsForThisPage];
+
+			const nestedIndex = currentComponents.findIndex(c => nestedSlug == firstObjectKey(c));
+
+			const changedComponentList = currentComponents[nestedIndex][nestedSlug]["components"].map((c, i) =>{
+				if(oldComponent == firstObjectKey(c)){
+					let newComponent = {...c, [`${val.value}-${i+1}`]: c[oldComponent]};
+					delete newComponent[oldComponent];
+
+					return newComponent;
+				} else {
+					return c
+				}
+			});
+
+			currentComponents[nestedIndex][nestedSlug]["components"] = changedComponentList;
+
+			return {
+				componentsForThisPage: currentComponents
+			}
+		});
+	}
+
 	render(){
 		const { otherRoutes } = this.props;
 		const { componentsForThisPage } = this.state;
-		console.log(componentsForThisPage);
 		return (
 			<div className="cms-page">
 				<div className="cms-header">
@@ -200,7 +244,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					<div className="main">
 						{
 							componentsForThisPage.map((c: CmsComponent, i: number) => (
-								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} />
+								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} addNestedComponent={this.createNestedComponent} changeNestedComponent={this.changeNestedComponent} />
 							))
 						}
 					</div>

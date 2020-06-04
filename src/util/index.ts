@@ -20,3 +20,7 @@ export const componentList = [
 		slug: "link"
 	}
 ];
+
+export const firstObjectKey = (obj: {}): string => {
+	return Object.keys(obj)[0];
+}
