@@ -35,7 +35,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 						<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" />
 						{
 							changeAvailable &&
-							<select name="change-component" onChange={changeThisComponent} value={newComponentType}>
+							<select className="change-component" name="change-component" onChange={changeThisComponent} value={newComponentType}>
 								{
 									componentList.map(c => (
 										<>
@@ -50,7 +50,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 						}
 					</>
 			}
-			<button className="delete-component" onClick={removeComponent}>Delete</button>
+			<button className="delete-component danger" onClick={removeComponent}>Delete</button>
 		</div>
 	)
 }
@@ -129,7 +129,9 @@ export default function({ changeComponentAttr, slug, deleteComponent, addNestedC
 								)
 							})
 						}
-						<button onClick={() => addNestedComponent(slugKey)} className="add-component">+ Add</button>
+						<div className="nested-component-footer">
+							<button onClick={() => addNestedComponent(slugKey)} className="add-component success">+ Add</button>
+						</div>
 					</>
 			}
 		</div>

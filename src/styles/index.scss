@@ -9,6 +9,23 @@ $boxShadowColor: #c2c6cc;
 body {
 	margin: 0;
 }
+
+button {
+	color: white;
+	padding: 10px 17px;
+	cursor: pointer;
+
+	&.success {
+		border: solid 2px $success;
+		background-color: $success;
+	}
+
+	&.danger{
+		border: solid 2px $danger;
+		background-color: $danger;
+	}
+}
+
 .cms-page {
 	width: 100%;
 	height: 100%;
@@ -38,19 +55,8 @@ body {
 		box-shadow: 2px 1px 10px $boxShadowColor;
 		border-radius: 3px;
 		button.cms-option {
-			cursor: pointer;
 			margin-left: 10px;
-			padding: 14px 21px;
 			border: solid 2px transparent;
-			&.danger {
-				background-color: $danger;
-				border-color: $danger;
-			}
-
-			&.success {
-				background-color: $success;
-				border-color: $success;
-			}
 		}
 	}
 	.cms-body {
@@ -63,18 +69,19 @@ body {
 		.components {
 			flex-basis: 250px;
 			background-color: white;
-			ul {
-				list-style-type: none;
-				li {
-					display: flex;
-					flex-direction: row;
-					p {
-						margin: auto;
-					}
-					button {
-						padding: 3px;
-						margin: auto;
-					}
+			display: flex;
+			flex-direction: column;
+			.component-item {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				p{
+					margin-top: auto;
+					margin-bottom: auto;
+					text-transform: capitalize;
+				}
+				button {
+					padding: 5px 11px;
 				}
 			}
 		}
@@ -103,11 +110,13 @@ body {
 						margin-top: auto;
 					}
 					.delete-component {
-						cursor: pointer;
-						padding: 10px 17px;
-						border: solid 2px transparent;
-						background-color: $danger;
-						border-color: $danger;
+					}
+					select.change-component {
+						width: 15%;
+						background-color: transparent!important;
+						padding: 10px;
+						border: solid 1px $secondary;
+						border-radius: 3px;
 					}
 				}
 				.component {
@@ -123,6 +132,19 @@ body {
 						&.textarea {
 							height: 60px;
 							resize: none;
+						}
+					}
+					.component-header{
+						padding-left: 0;
+						padding-right: 0;
+					}
+
+					.nested-component-footer{
+						margin: 15px;
+						display: flex;
+						flex-direction: column;
+						.add-component {
+							margin: auto;
 						}
 					}
 				}

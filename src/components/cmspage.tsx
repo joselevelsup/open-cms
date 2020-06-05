@@ -226,20 +226,20 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				</div>
 				<div className="cms-body">
 					<div className="components">
-						<ul>
+						<>
 							{
 								componentList.map((c: any, i: number) => (
-									<li key={i}>
+									<div className="component-item" key={i}>
 										<p>
 											{c.name}
 										</p>
-										<button onClick={() => this.addComponentToList(c.slug)}>
+										<button className="success" onClick={() => this.addComponentToList(c.slug)}>
 											+
 										</button>
-									</li>
+									</div>
 								))
 							}
-						</ul>
+						</>
 					</div>
 					<div className="main">
 						{
