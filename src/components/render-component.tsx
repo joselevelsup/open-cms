@@ -57,15 +57,25 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 
 const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
-	const typeOfInput: string = splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
+	const typeOfInput: string = splitKey.length == 4 ? `${splitKey[1]}-${splitKey[2]}` : splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
 	switch(typeOfInput){
 		case "short-text":
 			return (
-				<input name={`${slugKey}-value`} type="text" value={slug[slugKey].value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} className="component-input" />
+				<input 
+					name={`${slugKey}-value`} 
+					type="text" value={slug[slugKey].value} 
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} 
+					className="component-input"
+				/>
 			);
 		case "long-text":
 			return (
-				<textarea name={`${slugKey}-value`} value={slug[slugKey].value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onCompTextChange(e, slugKey, "value")} className="component-input textarea" />
+				<textarea 
+					name={`${slugKey}-value`} 
+					value={slug[slugKey].value} 
+					onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} 
+					className="component-input textarea" 
+				/>
 			);
 
 		case "media": 
