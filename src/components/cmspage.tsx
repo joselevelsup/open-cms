@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteProps, Link } from "react-router-dom";
 import { CmsRoute } from "../app";
-import { componentList, firstObjectKey } from "../util";
+import { componentList, firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import "../styles/index.scss";
@@ -21,25 +21,81 @@ interface CmsComponent {
   [key: string]: BasicCmsComponentEntry | NestedCmsComponentEntry
 }
 
+interface ApiComponentData {
+	id: number;
+	title: string;
+	value?: string;
+	type: string;
+	slug: string;
+}
+
+interface ApiComponentDataWithNested extends ApiComponentData {
+	components?: [ApiComponentData]
+}
+
 interface CmsPageProps extends RouteProps {
-	otherRoutes: [CmsRoute],
-	apiRoute: string
+	otherRoutes: [CmsRoute];
+	apiRoute: string;
+	customComponents: { name: string, slug: string, component: React.ReactNode }[]
 }
 
 interface CmsPageState {
 	componentsForThisPage: CmsComponent[];
+	needsUpdateAlert: boolean;
+	componentList: { name: string, slug: string, component?: React.ReactNode }[]
 }
 
 
 export default class CmsPage extends React.Component<CmsPageProps, CmsPageState> {
 
 	state = {
-		componentsForThisPage: []
+		componentsForThisPage: [],
+		needsUpdateAlert: false,
+		componentList: [
+			{
+				name: "short text",
+				slug: "short-text"
+			},
+			{
+				name: "long text",
+				slug: "long-text"
+			}, 
+			{
+				name: "nested",
+				slug: "nested"
+			},
+			{
+				name: "media",
+				slug: "media"
+			},
+			{
+				name: "link",
+				slug: "link"
+			}
+		]
 	}
 
 	static defaultProps = {
 		otherRoutes: [],
 		apiRoute: "http://localhost:8080"
+	}
+
+	componentDidMount(){
+		const { customComponents } = this.props;
+		if(customComponents){
+			this.setState(state => ({
+				componentList: [...state.componentList, ...customComponents]
+			}));
+		}
+	}
+
+	componentDidUpdate(_prevProps: CmsPageProps, prevState: CmsPageState){
+		const { componentsForThisPage } = this.state;
+		if(prevState.componentsForThisPage !== componentsForThisPage){
+			this.setState({
+				needsUpdateAlert: true
+			});
+		}
 	}
 
 	addComponentToList = (slug: string): void => {
@@ -136,21 +192,52 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		const data = componentsForThisPage.map((c: CmsComponent) => {
 			let key = firstObjectKey(c);
 			let spl: string[] = key.split("-");
-			const typeOfComponent: string = `${spl[0]}-${spl[1]}`;
-			let componentData = {
-				title: c[key]["title"],
-				value: c[key]["value"],
-				type: typeOfComponent
-			};
+			let componentData: ApiComponentDataWithNested;
+
+			if(spl[0] == "nested"){
+				let id: number = parseInt(spl[1]);
+				let components: [ApiComponentData] = c[key]["components"].map((nc: CmsComponent) => {
+					let nestedKey = firstObjectKey(nc);
+					let nestedSpl: string[] = nestedKey.split("-");
+					let nestedId: number = nestedSpl.length == 4 ? parseInt(nestedSpl[3]) : parseInt(nestedSpl[2]);
+					const nestedTypeOfComponent: string = nestedSpl.length == 4 ? `${nestedSpl[1]}-${nestedSpl[2]}` : nestedSpl[1];
+					return {
+						id: nestedId,
+						title: slugify(nc[nestedKey]["title"]),
+						value: nc[nestedKey]["value"],
+						type: nestedTypeOfComponent
+					}
+				});
+
+				componentData = {
+					id,
+					title: c[key]["title"],
+					slug: slugify(c[key]["title"]),
+					components,
+					type: spl[0]
+				}
+			} else {
+				const typeOfComponent: string = `${spl[0]}-${spl[1]}`;
+				let id: number = spl.length == 3 ? parseInt(spl[2]) : parseInt(spl[1]);
+				componentData = {
+					id,
+					title: c[key]["title"],
+					slug: slugify(c[key]["title"]),
+					value: c[key]["value"],
+					type: typeOfComponent
+				};
+			}
 
 			return componentData;
 		});
 
-		axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => {
-			console.log(resp);
-		}).catch((err: AxiosError) => {
-			console.log(err);
-		})	
+		console.log(data);
+
+		/* axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => { */
+		/* 	console.log(resp); */
+		/* }).catch((err: AxiosError) => { */
+		/* 	console.log(err); */
+		/* }) */	
 	}
 
 	createNestedComponent = (nestedSlug: string): void => {
@@ -201,7 +288,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 	render(){
 		const { otherRoutes } = this.props;
-		const { componentsForThisPage } = this.state;
+		const { componentsForThisPage, needsUpdateAlert, componentList } = this.state;
 		return (
 			<div className="cms-page">
 				<div className="cms-header">
@@ -221,7 +308,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 						Cancel
 					</button>
 					<button onClick={() => this.saveCmsData()} className="cms-option success">
-						Save Changes
+						{`${needsUpdateAlert ? "! " : ""}Save Changes`}
 					</button>
 				</div>
 				<div className="cms-body">

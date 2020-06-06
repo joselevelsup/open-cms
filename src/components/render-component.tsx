@@ -29,10 +29,10 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 
 	return (
 		<div className="component-header">
+			<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" type="text" />
 			{
 				!type.includes("nested") &&
 					<>
-						<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" />
 						{
 							changeAvailable &&
 							<select className="change-component" name="change-component" onChange={changeThisComponent} value={newComponentType}>
