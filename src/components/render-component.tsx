@@ -101,6 +101,12 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 	}
 }
 
+const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string) => {
+	return (
+		<div></div>
+	);
+}
+
 export default function({ changeComponentAttr, slug, deleteComponent, addNestedComponent, changeNestedComponent }: ComponentProps){
 	const slugKey: string = firstObjectKey(slug);
 	return (

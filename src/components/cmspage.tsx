@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteProps, Link } from "react-router-dom";
 import { CmsRoute } from "../app";
-import { componentList, firstObjectKey, slugify } from "../util";
+import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import "../styles/index.scss";
@@ -139,7 +139,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			});
 
 			if(parent){
-				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s) => firstObjectKey(s) == childSlug);
+				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s: CmsComponent) => firstObjectKey(s) == childSlug);
 
 				currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug] = {
 					...currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug],
@@ -267,7 +267,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 			const nestedIndex = currentComponents.findIndex(c => nestedSlug == firstObjectKey(c));
 
-			const changedComponentList = currentComponents[nestedIndex][nestedSlug]["components"].map((c, i) =>{
+			const changedComponentList = currentComponents[nestedIndex][nestedSlug]["components"].map((c: CmsComponent, i: number) =>{
 				if(oldComponent == firstObjectKey(c)){
 					let newComponent = {...c, [`n-${val.value}-${i+1}`]: c[oldComponent]};
 					delete newComponent[oldComponent];
