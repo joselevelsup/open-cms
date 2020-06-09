@@ -5,3 +5,13 @@ export const firstObjectKey = (obj: {}): string => {
 export const slugify = (s: string): string => {
 	return s.split(" ").join("-");
 }
+
+export const containsAny = (s: string, arr: string[]): boolean => {
+	for(let i in arr){
+		if(s.includes(arr[i])){
+			return true;
+		}
+	}
+
+	return false;
+}

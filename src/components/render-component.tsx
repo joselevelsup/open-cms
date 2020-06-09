@@ -1,5 +1,5 @@
 import * as React from "react";
-import { componentList, firstObjectKey } from "../util";
+import { firstObjectKey, containsAny } from "../util";
 
 interface ComponentProps {
 	slug: any;
@@ -7,6 +7,7 @@ interface ComponentProps {
 	deleteComponent(slug: string, parent?: boolean, childSlug?: string): void;
 	addNestedComponent(slugKey: string): void;
 	changeNestedComponent(e: React.ChangeEvent<HTMLSelectElement>, slugKey: string, oldComponent: string): void;
+	componentList: { name: string, slug: string, component?: React.ComponentType}[]
 }
 
 interface ComponentHeaderProps {
@@ -17,9 +18,10 @@ interface ComponentHeaderProps {
 	type: string;
 	changeComponent?(e: React.ChangeEvent<HTMLSelectElement>): void;
 	changeAvailable?: boolean;
+	componentlist?: { name: string, slug: string, component?: React.ComponentType }[]
 }
 
-const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange, removeComponent, type, changeComponent, changeAvailable }) => {
+const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange, removeComponent, type, changeComponent, changeAvailable, componentlist }) => {
 	const [ newComponentType, setNewComponentType ] = React.useState<string>("short-text");
 
 	const changeThisComponent = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,7 +39,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 							changeAvailable &&
 							<select className="change-component" name="change-component" onChange={changeThisComponent} value={newComponentType}>
 								{
-									componentList.map(c => (
+									componentlist.map(c => (
 										<>
 											{
 												c.name !== "nested" &&
@@ -101,13 +103,18 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 	}
 }
 
-const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string) => {
+const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[]) => {
+	const splitKey: string[] = slugKey.split("-"); 
+	const typeOfInput: string = splitKey.length == 4 ? `${splitKey[1]}-${splitKey[2]}` : splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
+	const CustomComponent: React.ComponentType = componentList.find(c => c.slug == typeOfInput).component;
 	return (
-		<div></div>
+		<div className="custom">
+			<CustomComponent onComponentChange={onCompTextChange} name={slugKey} />
+		</div>
 	);
 }
 
-export default function({ changeComponentAttr, slug, deleteComponent, addNestedComponent, changeNestedComponent }: ComponentProps){
+export default function({ componentList, changeComponentAttr, slug, deleteComponent, addNestedComponent, changeNestedComponent }: ComponentProps){
 	const slugKey: string = firstObjectKey(slug);
 	return (
 	<div className="component-container">
@@ -122,7 +129,16 @@ export default function({ changeComponentAttr, slug, deleteComponent, addNestedC
 			{
 				!slugKey.includes("nested") ?
 					<>
-						{renderActualComponent(slug, changeComponentAttr, slugKey)}
+						{
+							containsAny(slugKey, ["short", "long", "media", "link"]) ?
+								<>
+									{renderActualComponent(slug, changeComponentAttr, slugKey)}
+								</>
+								:
+								<>
+									{renderCustomComponent(slug, changeComponentAttr, slugKey, componentList)}
+								</>
+						}
 					</>
 					:
 					<>
@@ -139,6 +155,7 @@ export default function({ changeComponentAttr, slug, deleteComponent, addNestedC
 											removeComponent={() => deleteComponent(slugKey, true, thisSlugKey)} 
 											changeComponent={(e: React.ChangeEvent<HTMLSelectElement>) => changeNestedComponent(e, slugKey, thisSlugKey)}
 											changeAvailable={true}
+											componentlist={componentList}
 										/>
 										{renderActualComponent(c, changeComponentAttr, thisSlugKey, true, slugKey)}
 									</>

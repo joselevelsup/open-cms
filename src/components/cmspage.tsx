@@ -36,13 +36,13 @@ interface ApiComponentDataWithNested extends ApiComponentData {
 interface CmsPageProps extends RouteProps {
 	otherRoutes: [CmsRoute];
 	apiRoute: string;
-	customComponents: { name: string, slug: string, component: React.ReactNode }[]
+	customComponents?: { name: string, component: React.ComponentType }[]
 }
 
 interface CmsPageState {
 	componentsForThisPage: CmsComponent[];
 	needsUpdateAlert: boolean;
-	componentList: { name: string, slug: string, component?: React.ReactNode }[]
+	componentList: { name: string, slug: string, component?: React.ComponentType }[]
 }
 
 
@@ -71,6 +71,11 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			{
 				name: "link",
 				slug: "link"
+			},
+			{
+				name: "message",
+				slug: "message",
+				component: ({ onComponentChange, name }) => ( <input onChange={(e: any) => onComponentChange(e, name)} /> )
 			}
 		]
 	}
@@ -83,8 +88,13 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	componentDidMount(){
 		const { customComponents } = this.props;
 		if(customComponents){
+			const newComponents = customComponents.map(c => ({
+				...c,
+				slug: slugify(c.name)
+			}));
+
 			this.setState(state => ({
-				componentList: [...state.componentList, ...customComponents]
+				componentList: [...state.componentList, ...newComponents]
 			}));
 		}
 	}
@@ -129,7 +139,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})
 	}
 
-	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement>, slug: string, attr: string, parent?: boolean, childSlug?: string): void => {
+	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, slug: string, attr: string = "value", parent?: boolean, childSlug?: string): void => {
 		const val = e.target;
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
@@ -331,7 +341,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					<div className="main">
 						{
 							componentsForThisPage.map((c: CmsComponent, i: number) => (
-								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} addNestedComponent={this.createNestedComponent} changeNestedComponent={this.changeNestedComponent} />
+								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} addNestedComponent={this.createNestedComponent} changeNestedComponent={this.changeNestedComponent} componentList={componentList} />
 							))
 						}
 					</div>
