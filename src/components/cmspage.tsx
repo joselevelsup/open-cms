@@ -4,6 +4,9 @@ import { CmsRoute } from "../app";
 import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
+import MarkdownIt from "markdown-it";
+import MdEditor from "react-markdown-editor-lite";
+import "react-markdown-editor-lite/lib/index.css";
 import "../styles/index.scss";
 
 interface BasicCmsComponentEntry {
@@ -75,7 +78,17 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			{
 				name: "message",
 				slug: "message",
-				component: ({ onComponentChange, name }) => ( <input onChange={(e: any) => onComponentChange(e, name)} /> )
+				component: ({ onComponentChange, name }) => {
+					const mdParser = new MarkdownIt();
+					return (
+						<MdEditor
+							value=""
+							style={{ height: "500px" }}
+							renderHTML={(text) => mdParser.render(text)}
+							onChange={(data) => onComponentChange(data.text, name)}
+						/>
+					)
+				}
 			}
 		]
 	}
@@ -139,8 +152,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})
 	}
 
-	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, slug: string, attr: string = "value", parent?: boolean, childSlug?: string): void => {
-		const val = e.target;
+	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any, slug: string, attr: string = "value", parent?: boolean, childSlug?: string): void => {
+		const val = e.target ? e.target : { value: e };
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
 			const slugIndex = currentComponents.findIndex((s: CmsComponent) => {

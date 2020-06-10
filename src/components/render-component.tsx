@@ -103,7 +103,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 	}
 }
 
-const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[]) => {
+const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[], child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
 	const typeOfInput: string = splitKey.length == 4 ? `${splitKey[1]}-${splitKey[2]}` : splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
 	const CustomComponent: React.ComponentType = componentList.find(c => c.slug == typeOfInput).component;
@@ -157,7 +157,16 @@ export default function({ componentList, changeComponentAttr, slug, deleteCompon
 											changeAvailable={true}
 											componentlist={componentList}
 										/>
-										{renderActualComponent(c, changeComponentAttr, thisSlugKey, true, slugKey)}
+										{
+											containsAny(slugKey, ["short", "long", "media", "link"]) ?
+												<>
+													{renderActualComponent(c, changeComponentAttr, thisSlugKey, true, slugKey)}
+												</>
+												:
+												<>
+													{renderCustomComponent(c, changeComponentAttr, thisSlugKey, componentList, true, slugKey)}
+												</>
+										}
 									</>
 								)
 							})
