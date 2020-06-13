@@ -79,6 +79,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				name: "message",
 				slug: "message",
 				component: ({ onComponentChange, name }) => {
+					//TODO: figure out a better way to adjust nested component values. 
+					//TODO: Pass value as a prop for HOC
 					const mdParser = new MarkdownIt();
 					return (
 						<MdEditor
