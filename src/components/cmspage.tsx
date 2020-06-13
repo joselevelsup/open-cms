@@ -129,7 +129,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					[`${slug}-${currentComponents.length+1}`]: {
 						components: [
 							{
-								"n-short-text-1": {
+								"short-text-1": {
 									title: "",
 									value: ""
 								}	
@@ -292,7 +292,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 			const changedComponentList = currentComponents[nestedIndex][nestedSlug]["components"].map((c: CmsComponent, i: number) =>{
 				if(oldComponent == firstObjectKey(c)){
-					let newComponent = {...c, [`n-${val.value}-${i+1}`]: c[oldComponent]};
+					let newComponent = {...c, [`${val.value}-${i+1}`]: c[oldComponent]};
 					delete newComponent[oldComponent];
 
 					return newComponent;

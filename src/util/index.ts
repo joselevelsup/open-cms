@@ -15,3 +15,14 @@ export const containsAny = (s: string, arr: string[]): boolean => {
 
 	return false;
 }
+
+export const removeLastItem = (arr: string[]): string => {
+	let newArr = [];
+	for(let i = 0; i < arr.length; i++){
+		if(i + 1 != arr.length){
+			newArr.push(arr[i])
+		}
+	}
+
+	return newArr.join("-");
+}

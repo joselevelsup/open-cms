@@ -1,5 +1,5 @@
 import * as React from "react";
-import { firstObjectKey, containsAny } from "../util";
+import { firstObjectKey, containsAny, removeLastItem } from "../util";
 
 interface ComponentProps {
 	slug: any;
@@ -59,7 +59,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 
 const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
-	const typeOfInput: string = splitKey.length == 4 ? `${splitKey[1]}-${splitKey[2]}` : splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
+	const typeOfInput: string = removeLastItem(splitKey);
 	switch(typeOfInput){
 		case "short-text":
 			return (
@@ -104,8 +104,9 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 }
 
 const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[], child?: boolean, parentSlugKey?: string) => {
+	console.log(slugKey);
 	const splitKey: string[] = slugKey.split("-"); 
-	const typeOfInput: string = splitKey.length == 4 ? `${splitKey[1]}-${splitKey[2]}` : splitKey.length == 3 ? `${splitKey[0]}-${splitKey[1]}` : splitKey[0];
+	const typeOfInput: string = removeLastItem(splitKey);
 	const CustomComponent: React.ComponentType = componentList.find(c => c.slug == typeOfInput).component;
 	return (
 		<div className="custom">
@@ -158,7 +159,7 @@ export default function({ componentList, changeComponentAttr, slug, deleteCompon
 											componentlist={componentList}
 										/>
 										{
-											containsAny(slugKey, ["short", "long", "media", "link"]) ?
+											containsAny(thisSlugKey, ["short", "long", "media", "link"]) ?
 												<>
 													{renderActualComponent(c, changeComponentAttr, thisSlugKey, true, slugKey)}
 												</>
