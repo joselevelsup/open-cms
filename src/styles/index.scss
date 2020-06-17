@@ -35,14 +35,28 @@ button {
 		flex-direction: row;
 		flex: 1;
 		background-color: white;
-		padding: 6px 0;
+		&.with-logo {
+			padding: 6px 0;
+		}
+
+		&.without-logo {
+			padding: 25px 10px;
+		}
 		.route-link {
-			padding: 13px 15px;
+			margin: auto 0;
 			background-color: transparent;
 			a {
 				text-decoration: none;
 				text-transform: capitalize;
 				color: $dark;
+			}
+		}
+		.header-logo {
+			max-width: 60px;
+			max-height: 60px;
+			margin: 0 10px;
+			img {
+				max-width: inherit;
 			}
 		}
 	}
@@ -108,8 +122,6 @@ button {
 						border-radius: 3px;
 						padding: 0 10px;
 						margin-top: auto;
-					}
-					.delete-component {
 					}
 					select.change-component {
 						width: 15%;

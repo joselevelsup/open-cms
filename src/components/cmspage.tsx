@@ -4,8 +4,6 @@ import { CmsRoute } from "../app";
 import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
-import MarkdownIt from "markdown-it";
-import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import "../styles/index.scss";
 
@@ -39,7 +37,8 @@ interface ApiComponentDataWithNested extends ApiComponentData {
 interface CmsPageProps extends RouteProps {
 	otherRoutes: [CmsRoute];
 	apiRoute: string;
-	customComponents?: { name: string, component: React.ComponentType }[]
+	customComponents?: { name: string, component: React.ComponentType }[];
+	logo: any;
 }
 
 interface CmsPageState {
@@ -80,7 +79,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 	static defaultProps = {
 		otherRoutes: [],
-		apiRoute: "http://localhost:8080"
+		apiRoute: "http://localhost:8080",
+		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1024px-Bootstrap_logo.svg.png"
 	}
 
 	componentDidMount(){
@@ -295,11 +295,17 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	}
 
 	render(){
-		const { otherRoutes } = this.props;
+		const { otherRoutes, logo } = this.props;
 		const { componentsForThisPage, needsUpdateAlert, componentList } = this.state;
 		return (
 			<div className="cms-page">
-				<div className="cms-header">
+				<div className={`cms-header ${logo ? "with-logo" : "without-logo"}`}>
+					{
+						logo &&
+							<div className="header-logo">
+								<img src={logo} />
+							</div>
+					}
 					{
 						otherRoutes.map((r: any, i: number) => (
 							<div key={i} className="route-link">
