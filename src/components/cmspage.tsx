@@ -1,9 +1,12 @@
 import * as React from "react";
 import { RouteProps, Link } from "react-router-dom";
 import { CmsRoute } from "../app";
-import { componentList, firstObjectKey, slugify } from "../util";
+import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
+import MarkdownIt from "markdown-it";
+import MdEditor from "react-markdown-editor-lite";
+import "react-markdown-editor-lite/lib/index.css";
 import "../styles/index.scss";
 
 interface BasicCmsComponentEntry {
@@ -36,13 +39,13 @@ interface ApiComponentDataWithNested extends ApiComponentData {
 interface CmsPageProps extends RouteProps {
 	otherRoutes: [CmsRoute];
 	apiRoute: string;
-	customComponents: { name: string, slug: string, component: React.ReactNode }[]
+	customComponents?: { name: string, component: React.ComponentType }[]
 }
 
 interface CmsPageState {
 	componentsForThisPage: CmsComponent[];
 	needsUpdateAlert: boolean;
-	componentList: { name: string, slug: string, component?: React.ReactNode }[]
+	componentList: { name: string, slug: string, component?: React.ComponentType }[]
 }
 
 
@@ -83,8 +86,13 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	componentDidMount(){
 		const { customComponents } = this.props;
 		if(customComponents){
+			const newComponents = customComponents.map(c => ({
+				...c,
+				slug: slugify(c.name)
+			}));
+
 			this.setState(state => ({
-				componentList: [...state.componentList, ...customComponents]
+				componentList: [...state.componentList, ...newComponents]
 			}));
 		}
 	}
@@ -106,7 +114,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					[`${slug}-${currentComponents.length+1}`]: {
 						components: [
 							{
-								"n-short-text-1": {
+								"short-text-1": {
 									title: "",
 									value: ""
 								}	
@@ -129,8 +137,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})
 	}
 
-	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement>, slug: string, attr: string, parent?: boolean, childSlug?: string): void => {
-		const val = e.target;
+	setComponentAttr = (slug: string, attr: string = "value", parent?: boolean, childSlug?: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any): void => {
+		const val = e.target ? e.target : { value: e };
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
 			const slugIndex = currentComponents.findIndex((s: CmsComponent) => {
@@ -139,7 +147,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			});
 
 			if(parent){
-				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s) => firstObjectKey(s) == childSlug);
+				const childSlugIndex = currentComponents[slugIndex][slug]["components"].findIndex((s: CmsComponent) => firstObjectKey(s) == childSlug);
 
 				currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug] = {
 					...currentComponents[slugIndex][slug]["components"][childSlugIndex][childSlug],
@@ -267,9 +275,9 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 			const nestedIndex = currentComponents.findIndex(c => nestedSlug == firstObjectKey(c));
 
-			const changedComponentList = currentComponents[nestedIndex][nestedSlug]["components"].map((c, i) =>{
+			const changedComponentList = currentComponents[nestedIndex][nestedSlug]["components"].map((c: CmsComponent, i: number) =>{
 				if(oldComponent == firstObjectKey(c)){
-					let newComponent = {...c, [`n-${val.value}-${i+1}`]: c[oldComponent]};
+					let newComponent = {...c, [`${val.value}-${i+1}`]: c[oldComponent]};
 					delete newComponent[oldComponent];
 
 					return newComponent;
@@ -331,7 +339,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					<div className="main">
 						{
 							componentsForThisPage.map((c: CmsComponent, i: number) => (
-								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} addNestedComponent={this.createNestedComponent} changeNestedComponent={this.changeNestedComponent} />
+								<RenderComponent key={i} slug={c} changeComponentAttr={this.setComponentAttr} deleteComponent={this.removeComponent} addNestedComponent={this.createNestedComponent} changeNestedComponent={this.changeNestedComponent} componentList={componentList} />
 							))
 						}
 					</div>
