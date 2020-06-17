@@ -1,4 +1,3 @@
-$pageColor: #d4e4ff;
 $danger: #f6511dff;
 $warning: #ffb400ff;
 $secondary: #00a6edff;
@@ -10,26 +9,8 @@ body {
 	margin: 0;
 }
 
-button {
-	color: white;
-	padding: 10px 17px;
-	cursor: pointer;
-
-	&.success {
-		border: solid 2px $success;
-		background-color: $success;
-	}
-
-	&.danger{
-		border: solid 2px $danger;
-		background-color: $danger;
-	}
-}
 
 .cms-page {
-	width: 100%;
-	height: 100%;
-	background-color: $pageColor;
 	.cms-header{
 		display: flex;
 		flex-direction: row;
@@ -44,6 +25,7 @@ button {
 		}
 		.route-link {
 			margin: auto 0;
+			padding-right: 12px;
 			background-color: transparent;
 			a {
 				text-decoration: none;

@@ -1,37 +1,41 @@
 import * as React from "react";
-import { Route } from "react-router-dom";
+import { useRoutes } from "hookrouter";
+import { ThemeProvider } from "styled-components";
 import CmsPage from "./components/cmspage";
-
-enum MethodTypes {
-	GET,
-	POST,
-	PUT,
-	DELETE
-}
+import { slugify } from "./util";
 
 export type CmsRoute = {
 	name: string,
 	apiRoute: string,
-	methods: [MethodTypes]
 }
 
 interface MainAppProps {
 	apiAddress?: string,
-	routes: [CmsRoute]
+	routes: [CmsRoute],
+	theme: any, //TODO: be specific on what the user can customize
+	logo: any
 }
 
 function AdminCMS(props: MainAppProps) {
-	const { routes } = props;
+	const { routes, theme, logo, apiAddress } = props;
+	
+	let remappedRoutes = {};
 
-	return (
-		<>
-			{
-				routes.map((r: CmsRoute, i: number, arr: [CmsRoute]) => (
-					<Route path={`/admin${r.apiRoute}`} render={routeProps => <CmsPage otherRoutes={arr} apiRoute={r.apiRoute} {...routeProps} />} />
-				))
-			}
-		</>
-	)
+	for(let r in routes){
+		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () =>(
+		<ThemeProvider theme={theme}>
+			<CmsPage 
+				otherRoutes={routes} 
+				apiRoute={apiAddress ? `${apiAddress}${routes[r].apiRoute}` : routes[r].apiRoute} 
+				logo={logo}
+			/>
+		</ThemeProvider>
+		) 
+	}
+
+	const router = useRoutes(remappedRoutes);
+
+	return router;
 }
 
 AdminCMS.defaultProps = {
@@ -39,9 +43,14 @@ AdminCMS.defaultProps = {
 		{
 			name: "home page",
 			apiRoute: "/home-page",
-			methods: ["POST"]
+		},
+		{
+			name: "about page",
+			apiRoute: "/about-page",
 		}
-	]
+	],
+	theme: {},
+	logo: null
 };
 
 export default AdminCMS;

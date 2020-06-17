@@ -1,5 +1,6 @@
 import * as React from "react";
 import { firstObjectKey, containsAny, removeLastItem } from "../util";
+import { DangerButton, SuccessButton } from "./styled/button";
 
 interface ComponentProps {
 	slug: any;
@@ -52,7 +53,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 						}
 					</>
 			}
-			<button className="delete-component danger" onClick={removeComponent}>Delete</button>
+			<DangerButton className="delete-component" onClick={removeComponent}>Delete</DangerButton>
 		</div>
 	)
 }
@@ -172,7 +173,7 @@ export default function({ componentList, changeComponentAttr, slug, deleteCompon
 							})
 						}
 						<div className="nested-component-footer">
-							<button onClick={() => addNestedComponent(slugKey)} className="add-component success">+ Add</button>
+							<SuccessButton onClick={() => addNestedComponent(slugKey)} className="add-component">+ Add</SuccessButton>
 						</div>
 					</>
 			}
