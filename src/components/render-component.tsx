@@ -3,7 +3,7 @@ import { firstObjectKey, containsAny, removeLastItem } from "../util";
 
 interface ComponentProps {
 	slug: any;
-	changeComponentAttr(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, slug: string, attr: string, parent?: boolean, childSlug?: string): void;
+	changeComponentAttr(slug: string, attr: string, parent?: boolean, childSlug?: string): (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	deleteComponent(slug: string, parent?: boolean, childSlug?: string): void;
 	addNestedComponent(slugKey: string): void;
 	changeNestedComponent(e: React.ChangeEvent<HTMLSelectElement>, slugKey: string, oldComponent: string): void;
@@ -66,7 +66,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 				<input 
 					name={`${slugKey}-value`} 
 					type="text" value={slug[slugKey].value} 
-					onChange={(e: React.ChangeEvent<HTMLInputElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} 
+					onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
 					className="component-input"
 				/>
 			);
@@ -75,7 +75,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 				<textarea 
 					name={`${slugKey}-value`} 
 					value={slug[slugKey].value} 
-					onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} 
+					onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
 					className="component-input textarea" 
 				/>
 			);
@@ -92,7 +92,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 						name={`${slugKey}-value`} 
 						type="text" 
 						value={slug[slugKey].value} 
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => !child ? onCompTextChange(e, slugKey, "value") : onCompTextChange(e, parentSlugKey, "value", true, slugKey)} 
+						onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
 						className="component-input" 
 					/>
 					<a href={slug[slugKey].value}>Test this link</a>
@@ -104,13 +104,12 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 }
 
 const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[], child?: boolean, parentSlugKey?: string) => {
-	console.log(slugKey);
 	const splitKey: string[] = slugKey.split("-"); 
 	const typeOfInput: string = removeLastItem(splitKey);
 	const CustomComponent: React.ComponentType = componentList.find(c => c.slug == typeOfInput).component;
 	return (
 		<div className="custom">
-			<CustomComponent onComponentChange={onCompTextChange} name={slugKey} />
+			<CustomComponent onComponentChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} nested={child} name={slugKey} />
 		</div>
 	);
 }
@@ -122,7 +121,7 @@ export default function({ componentList, changeComponentAttr, slug, deleteCompon
 		<ComponentHeader 
 			name={`${slugKey}-title`} 
 			value={slug[slugKey].title} 
-			onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title")} 
+			onChange={changeComponentAttr(slugKey, "title")} 
 			type={slugKey} 
 			removeComponent={() => deleteComponent(slugKey)} 
 		/>
@@ -151,7 +150,7 @@ export default function({ componentList, changeComponentAttr, slug, deleteCompon
 										<ComponentHeader 
 											name={`${thisSlugKey}-title`} 
 											value={c[thisSlugKey].title} 
-											onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeComponentAttr(e, slugKey, "title", true, thisSlugKey)} 
+											onChange={changeComponentAttr(slugKey, "title", true, thisSlugKey)} 
 											type={thisSlugKey} 
 											removeComponent={() => deleteComponent(slugKey, true, thisSlugKey)} 
 											changeComponent={(e: React.ChangeEvent<HTMLSelectElement>) => changeNestedComponent(e, slugKey, thisSlugKey)}

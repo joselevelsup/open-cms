@@ -74,23 +74,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			{
 				name: "link",
 				slug: "link"
-			},
-			{
-				name: "message",
-				slug: "message",
-				component: ({ onComponentChange, name }) => {
-					//TODO: figure out a better way to adjust nested component values. 
-					//TODO: Pass value as a prop for HOC
-					const mdParser = new MarkdownIt();
-					return (
-						<MdEditor
-							value=""
-							style={{ height: "500px" }}
-							renderHTML={(text) => mdParser.render(text)}
-							onChange={(data) => onComponentChange(data.text, name)}
-						/>
-					)
-				}
 			}
 		]
 	}
@@ -154,7 +137,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})
 	}
 
-	setComponentAttr = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any, slug: string, attr: string = "value", parent?: boolean, childSlug?: string): void => {
+	setComponentAttr = (slug: string, attr: string = "value", parent?: boolean, childSlug?: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any): void => {
 		const val = e.target ? e.target : { value: e };
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
