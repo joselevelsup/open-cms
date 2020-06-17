@@ -1,12 +1,10 @@
 import * as React from "react";
-import { RouteProps, Link } from "react-router-dom";
 import { CmsRoute } from "../app";
 import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
-import MarkdownIt from "markdown-it";
-import MdEditor from "react-markdown-editor-lite";
-import "react-markdown-editor-lite/lib/index.css";
+import { SuccessButton, DangerButton } from "./styled/button";
+import Cms from "./styled/cms";
 import "../styles/index.scss";
 
 interface BasicCmsComponentEntry {
@@ -36,10 +34,11 @@ interface ApiComponentDataWithNested extends ApiComponentData {
 	components?: [ApiComponentData]
 }
 
-interface CmsPageProps extends RouteProps {
+interface CmsPageProps {
 	otherRoutes: [CmsRoute];
 	apiRoute: string;
-	customComponents?: { name: string, component: React.ComponentType }[]
+	customComponents?: { name: string, component: React.ComponentType }[];
+	logo: any;
 }
 
 interface CmsPageState {
@@ -80,7 +79,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 	static defaultProps = {
 		otherRoutes: [],
-		apiRoute: "http://localhost:8080"
+		apiRoute: "http://localhost:8080",
+		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1024px-Bootstrap_logo.svg.png"
 	}
 
 	componentDidMount(){
@@ -295,29 +295,35 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	}
 
 	render(){
-		const { otherRoutes } = this.props;
+		const { otherRoutes, logo } = this.props;
 		const { componentsForThisPage, needsUpdateAlert, componentList } = this.state;
 		return (
-			<div className="cms-page">
-				<div className="cms-header">
+			<Cms className="cms-page">
+				<div className={`cms-header ${logo ? "with-logo" : "without-logo"}`}>
+					{
+						logo &&
+							<div className="header-logo">
+								<img src={logo} />
+							</div>
+					}
 					{
 						otherRoutes.map((r: any, i: number) => (
 							<div key={i} className="route-link">
-								<Link to={`/admin/${r.name}`}>
+								<a href={`/admin/${slugify(r.name)}`}>
 									{r.name}
-								</Link>
+								</a>
 							</div>
 						))
 					}
 				</div>
 				<br />
 				<div className="cms-page-options">
-					<button className="cms-option danger">
+					<DangerButton className="cms-option">
 						Cancel
-					</button>
-					<button onClick={() => this.saveCmsData()} className="cms-option success">
+					</DangerButton>
+					<SuccessButton onClick={() => this.saveCmsData()} className="cms-option">
 						{`${needsUpdateAlert ? "! " : ""}Save Changes`}
-					</button>
+					</SuccessButton>
 				</div>
 				<div className="cms-body">
 					<div className="components">
@@ -328,9 +334,9 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 										<p>
 											{c.name}
 										</p>
-										<button className="success" onClick={() => this.addComponentToList(c.slug)}>
+										<SuccessButton onClick={() => this.addComponentToList(c.slug)}>
 											+
-										</button>
+										</SuccessButton>
 									</div>
 								))
 							}
@@ -344,7 +350,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 						}
 					</div>
 				</div>
-			</div>
+			</Cms>
 		);
 	}
 }
