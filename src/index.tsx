@@ -10,11 +10,11 @@ export type CmsRoute = {
 }
 
 interface MainAppProps {
-	apiAddress?: string,
-	routes: [CmsRoute],
-	theme: any, //TODO: be specific on what the user can customize
-	logo: any,
-	components: { name: string, slug: string, component: React.ComponentType }[]
+	apiAddress?: string;
+	routes: [CmsRoute];
+	theme: any; //TODO: be specific on what the user can customize
+	logo: any;
+	components: { name: string, slug: string, component: React.ComponentType }[];
 }
 
 function OpenCms(props: MainAppProps) {
