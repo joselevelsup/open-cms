@@ -3,6 +3,7 @@ import { CmsRoute } from "../app";
 import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
+import { IoMdAlert, IoMdAdd } from "react-icons/io";
 import { SuccessButton, DangerButton } from "./styled/button";
 import Cms from "./styled/cms";
 import "../styles/index.scss";
@@ -80,7 +81,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	static defaultProps = {
 		otherRoutes: [],
 		apiRoute: "http://localhost:8080",
-		logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1024px-Bootstrap_logo.svg.png"
+		logo: null
 	}
 
 	componentDidMount(){
@@ -321,8 +322,11 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					<DangerButton className="cms-option">
 						Cancel
 					</DangerButton>
-					<SuccessButton onClick={() => this.saveCmsData()} className="cms-option">
-						{`${needsUpdateAlert ? "! " : ""}Save Changes`}
+					<SuccessButton onClick={() => this.saveCmsData()} className={`cms-option ${needsUpdateAlert ? "not-updated" : ""}`}>
+						<div style={{ display: "flex" }}>
+							{needsUpdateAlert && <p><IoMdAlert color="white" style={{ width: "25px", height: "25px" }} /></p>}
+							<p> Save Changes</p>
+						</div>
 					</SuccessButton>
 				</div>
 				<div className="cms-body">
@@ -335,7 +339,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 											{c.name}
 										</p>
 										<SuccessButton onClick={() => this.addComponentToList(c.slug)}>
-											+
+											<IoMdAdd color="white" style={{ width: "16px", height: "16px"}} />
 										</SuccessButton>
 									</div>
 								))

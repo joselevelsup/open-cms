@@ -5,8 +5,11 @@ $success: #7fb800ff;
 $dark: #0d2c54ff;
 $boxShadowColor: #c2c6cc;
 
+@import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
+
 body {
 	margin: 0;
+	font-family: 'Assistant', sans-serif;
 }
 
 
@@ -53,6 +56,20 @@ body {
 		button.cms-option {
 			margin-left: 10px;
 			border: solid 2px transparent;
+			&.not-updated {
+				padding-top: 0;
+				padding-bottom: 0;
+				p {
+					margin-top: auto;
+					margin-bottom: auto;
+					&:last-child{
+						margin-left: 6px;
+					}
+				}
+			}
+			p {
+				margin: 0;
+			}
 		}
 	}
 	.cms-body {
@@ -127,6 +144,11 @@ body {
 							height: 60px;
 							resize: none;
 						}
+
+						&.link {
+							width: 90%;
+							margin-right: 10px;
+						}
 					}
 					.component-header{
 						padding-left: 0;
@@ -146,11 +168,8 @@ body {
 				.link-container {
 					display: flex;
 					flex-direction: row;
-					input {
-						width: 85%;
-					}
 					a {
-						margin-top: auto; //work on centering text vertically
+						margin: auto;
 					}
 				}
 			}

@@ -94,7 +94,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 						type="text" 
 						value={slug[slugKey].value} 
 						onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
-						className="component-input" 
+						className="component-input link" 
 					/>
 					<a href={slug[slugKey].value}>Test this link</a>
 				</div>
