@@ -13,12 +13,13 @@ Coming soon.
 
 ### Props
 
-| Prop Name | Type							 | Required? | Default							 |
-|-----------|--------------------|-----------|-----------------------|
-|	routes    | array (see below)	 | Yes			 | none									 |
-| apiAddress|	string						 | No				 | http://localhost:8080 |
-| theme     |	object (see below) | No        | none									 |
-| logo      |	string						 | No        | none                  |
+| Prop Name  | Type							  | Required? | Default							  |
+|------------|--------------------|-----------|-----------------------|
+|	routes		 | array (see below)	| Yes			  | none									|
+| apiAddress | string						  | No				| http://localhost:8080 |
+| theme			 | object (see below) | No        |	{}									  |
+| logo			 | string						  | No        | null                  |
+| components | array (see below)  | No			  | []                    |
 
 
 #### Routes
@@ -42,7 +43,6 @@ const routes = [
 
 The CMS will always push a PUT request to whatever API route you set.
 
-
 #### Theming
 
 By default, a colorscheme has been put in place. IF you don't like it, OH WELL! No I'm just kidding. You can change it up!
@@ -59,6 +59,32 @@ const theme = {
 
 Now this is going to keep updating and the CMS will be customizable to the toe! Stay tuned ;)
 
+#### Custom Components
+
+Open CMS tries to make Custom Components simple to add. There are already components that come by default but you can add your own in case some were missed. For instance, I'm going to add a markdown editor using `react-markdown-editor-lite`. A name, a slug, and the actual component must be added. The component must be wrapped in a function to pass props into your component.
+
+You only need to pass 2 props into your custom component. 
+1. `onComponentChange` - this is a function that takes any data you pass to it and the name of the component. It's important that you pass both.
+2. `name` - this is just the name the CMS gives your custom component. This name can change based on the position or if it is nested. 
+```javascript
+const customComponents = [
+	{
+		name: "myComponent",
+		slug: "my-component",
+		component: ({ onComponentChange, name }) => {
+			const mdParser = new MarkdownIt();
+			return (
+				<MdEditor
+					value=""
+					style={{ height: "500px" }}
+					renderHTML={(text) => mdParser.render(text)}
+					onChange={(data) => onComponentChange(data.text, name)}
+				/>
+			)
+		}
+	}
+]
+```
 
 ## What's left?
 
