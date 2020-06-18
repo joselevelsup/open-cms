@@ -13,11 +13,12 @@ interface MainAppProps {
 	apiAddress?: string,
 	routes: [CmsRoute],
 	theme: any, //TODO: be specific on what the user can customize
-	logo: any
+	logo: any,
+	components: { name: string, slug: string, component: React.ComponentType }[]
 }
 
 function AdminCMS(props: MainAppProps) {
-	const { routes, theme, logo, apiAddress } = props;
+	const { routes, theme, logo, apiAddress, components } = props;
 	
 	let remappedRoutes = {};
 
@@ -28,6 +29,7 @@ function AdminCMS(props: MainAppProps) {
 				otherRoutes={routes} 
 				apiRoute={apiAddress ? `${apiAddress}${routes[r].apiRoute}` : routes[r].apiRoute} 
 				logo={logo}
+				customComponents={components}
 			/>
 		</ThemeProvider>
 		) 
@@ -50,7 +52,8 @@ AdminCMS.defaultProps = {
 		}
 	],
 	theme: {},
-	logo: null
+	logo: null,
+	components: []
 };
 
 export default AdminCMS;
