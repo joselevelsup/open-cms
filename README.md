@@ -26,7 +26,7 @@ Coming soon.
 
 In order for the CMS to know what content is being related to what page, an array of objects needs to be passed into the CMS component. The array of objects looks like this:
 
-```JSX
+```javascript
 const routes = [
 	{
 		name: "home page", //String
@@ -87,6 +87,40 @@ const customComponents = [
 
 <OpenCms components={customComponents} />
 ```
+### Example Data Submission
+```javascript
+[
+  {
+    "id": 1,
+    "title": "short title",
+    "slug": "short-title",
+    "value": "short value",
+    "type": "short-text"
+  },
+  {
+    "id": 2,
+    "title": "nested title",
+    "slug": "nested-title",
+    "components": [
+      {
+        "id": 1,
+        "title": "this-is-a-nested-title",
+        "value": "this is a nested value",
+        "type": "short-text"
+      }
+    ],
+    "type": "nested"
+  },
+  {
+    "id": 3,
+    "title": "linked title",
+    "slug": "linked-title",
+    "value": "http://google.com",
+    "type": "link-3"
+  }
+]
+```
+
 
 ## What's left?
 
