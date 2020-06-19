@@ -26,7 +26,7 @@ Coming soon.
 
 In order for the CMS to know what content is being related to what page, an array of objects needs to be passed into the CMS component. The array of objects looks like this:
 
-```javascript
+```JSX
 const routes = [
 	{
 		name: "home page", //String
@@ -84,6 +84,8 @@ const customComponents = [
 		}
 	}
 ]
+
+<OpenCms components={customComponents} />
 ```
 
 ## What's left?
@@ -92,15 +94,15 @@ Well follow the table :P
 
 | Todo								        | In Progress									| Done	|
 |-----------------------------|-----------------------------|-------|
-| Theming								      |	X (but some currently work)	| 			|
-| Basic Components						|															|	X			|
-| Custom Components						|															| X			|
-| Nested Components						|															| X			|
-| Image Upload								|	X														|				|
-| Sending Data								| X														|				|
+| Theming								      |	:heavy_check_mark: (but some currently work)	| 			|
+| Basic Components						|															|	:heavy_check_mark:			|
+| Custom Components						|															| :heavy_check_mark:			|
+| Nested Components						|															| :heavy_check_mark:			|
+| Image Upload								|	:heavy_check_mark:					|				|
+| Sending Data								| :heavy_check_mark:					|				|
 |	Mobile View									|															|				|
 |	Testing with Other Routers	|															|				|
-| This Readme									|	X														|				|
+| This Readme									|	:heavy_check_mark:					|				|
 
 
 
