@@ -81,7 +81,41 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	static defaultProps = {
 		otherRoutes: [],
 		apiRoute: "http://localhost:8080",
-		logo: null
+		logo: null,
+		customComponents: []
+	}
+
+	loadComponentData = async () => {
+		const { apiRoute } = this.props;
+
+		const { data }: AxiosResponse = await axios.get(apiRoute);
+
+		let remappedData = data.map(t => {
+			let remappedComponent = {};
+			if(t.type == "nested"){
+				let remappedNestedComponents = t.components.map(tc => ({
+					[`${tc.type}-${tc.id}`]: {
+						"title": tc.title,
+						"value": tc.value
+					}
+				}));
+				remappedComponent[`${t.type}-${t.id}`] = {
+					"title": t.title,
+					"components": remappedNestedComponents
+				}
+			} else {
+				remappedComponent[`${t.type}-${t.id}`] = {
+					"title": t.title,
+					"value": t.value
+				}
+			}
+
+			return remappedComponent;
+		});
+
+		this.setState({
+			componentsForThisPage: remappedData
+		});
 	}
 
 	componentDidMount(){
@@ -96,6 +130,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				componentList: [...state.componentList, ...newComponents]
 			}));
 		}
+
+		this.loadComponentData();
 	}
 
 	componentDidUpdate(_prevProps: CmsPageProps, prevState: CmsPageState){
