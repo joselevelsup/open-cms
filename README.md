@@ -84,7 +84,43 @@ const customComponents = [
 		}
 	}
 ]
+
+<OpenCms components={customComponents} />
 ```
+### Example Data Submission
+```javascript
+[
+  {
+    "id": 1,
+    "title": "short title",
+    "slug": "short-title",
+    "value": "short value",
+    "type": "short-text"
+  },
+  {
+    "id": 2,
+    "title": "nested title",
+    "slug": "nested-title",
+    "components": [
+      {
+        "id": 1,
+        "title": "this-is-a-nested-title",
+        "value": "this is a nested value",
+        "type": "short-text"
+      }
+    ],
+    "type": "nested"
+  },
+  {
+    "id": 3,
+    "title": "linked title",
+    "slug": "linked-title",
+    "value": "http://google.com",
+    "type": "link-3"
+  }
+]
+```
+
 
 ## What's left?
 
@@ -92,15 +128,15 @@ Well follow the table :P
 
 | Todo								        | In Progress									| Done	|
 |-----------------------------|-----------------------------|-------|
-| Theming								      |	X (but some currently work)	| 			|
-| Basic Components						|															|	X			|
-| Custom Components						|															| X			|
-| Nested Components						|															| X			|
-| Image Upload								|	X														|				|
-| Sending Data								| X														|				|
+| Theming								      |	:heavy_check_mark: (but some currently work)	| 			|
+| Basic Components						|															|	:heavy_check_mark:			|
+| Custom Components						|															| :heavy_check_mark:			|
+| Nested Components						|															| :heavy_check_mark:			|
+| Image Upload								|	:heavy_check_mark:					|				|
+| Sending Data								| :heavy_check_mark:					|				|
 |	Mobile View									|															|				|
 |	Testing with Other Routers	|															|				|
-| This Readme									|	X														|				|
+| This Readme									|	:heavy_check_mark:					|				|
 
 
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CmsRoute } from "../app";
+import { CmsRoute } from "../";
 import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
@@ -208,8 +208,9 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				let components: [ApiComponentData] = c[key]["components"].map((nc: CmsComponent) => {
 					let nestedKey = firstObjectKey(nc);
 					let nestedSpl: string[] = nestedKey.split("-");
-					let nestedId: number = nestedSpl.length == 4 ? parseInt(nestedSpl[3]) : parseInt(nestedSpl[2]);
-					const nestedTypeOfComponent: string = nestedSpl.length == 4 ? `${nestedSpl[1]}-${nestedSpl[2]}` : nestedSpl[1];
+					console.log(nestedSpl);
+					let nestedId: number = nestedSpl.length == 3 ? parseInt(nestedSpl[2]) : parseInt(nestedSpl[1]);
+					const nestedTypeOfComponent: string = nestedSpl.length == 3 ? `${nestedSpl[0]}-${nestedSpl[1]}` : nestedSpl[0];
 					return {
 						id: nestedId,
 						title: slugify(nc[nestedKey]["title"]),
@@ -226,7 +227,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					type: spl[0]
 				}
 			} else {
-				const typeOfComponent: string = `${spl[0]}-${spl[1]}`;
+				const typeOfComponent: string = spl.length == 3 ? `${spl[0]}-${spl[1]}` : spl[0];
 				let id: number = spl.length == 3 ? parseInt(spl[2]) : parseInt(spl[1]);
 				componentData = {
 					id,
