@@ -87,35 +87,41 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 	loadComponentData = async () => {
 		const { apiRoute } = this.props;
+		const self = this;
 
-		const { data }: AxiosResponse = await axios.get(apiRoute);
-
-		let remappedData = data.map(t => {
-			let remappedComponent = {};
-			if(t.type == "nested"){
-				let remappedNestedComponents = t.components.map(tc => ({
-					[`${tc.type}-${tc.id}`]: {
-						"title": tc.title,
-						"value": tc.value
+		axios.get(apiRoute).then((resp: AxiosResponse) => {
+			console.log(resp);
+			const { data } = resp;
+			let remappedData = data.map(t => {
+				let remappedComponent = {};
+				if(t.type == "nested"){
+					let remappedNestedComponents = t.components.map(tc => ({
+						[`${tc.type}-${tc.id}`]: {
+							"title": tc.title,
+							"value": tc.value
+						}
+					}));
+					remappedComponent[`${t.type}-${t.id}`] = {
+						"title": t.title,
+						"components": remappedNestedComponents
 					}
-				}));
-				remappedComponent[`${t.type}-${t.id}`] = {
-					"title": t.title,
-					"components": remappedNestedComponents
+				} else {
+					remappedComponent[`${t.type}-${t.id}`] = {
+						"title": t.title,
+						"value": t.value
+					}
 				}
-			} else {
-				remappedComponent[`${t.type}-${t.id}`] = {
-					"title": t.title,
-					"value": t.value
-				}
-			}
 
-			return remappedComponent;
-		});
+				return remappedComponent;
+			});
 
-		this.setState({
-			componentsForThisPage: remappedData
-		});
+			this.setState({
+				componentsForThisPage: remappedData
+			});
+		}).catch((err: AxiosError) => {
+			console.log(err);
+		})
+
 	}
 
 	componentDidMount(){

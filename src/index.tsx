@@ -23,7 +23,7 @@ function OpenCms(props: MainAppProps) {
 	let remappedRoutes = {};
 
 	for(let r in routes){
-		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () =>(
+		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
 		<ThemeProvider theme={theme}>
 			<CmsPage 
 				otherRoutes={routes} 
@@ -44,11 +44,7 @@ OpenCms.defaultProps = {
 	routes: [
 		{
 			name: "home page",
-			apiRoute: "/home-page",
-		},
-		{
-			name: "about page",
-			apiRoute: "/about-page",
+			apiRoute: "/home",
 		}
 	],
 	theme: {},
