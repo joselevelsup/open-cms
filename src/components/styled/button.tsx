@@ -15,7 +15,9 @@ const DangerButton = styled(Button)`
 	background-color: ${props => props.theme.danger ? props.theme.danger : danger};
 `;
 
-const SuccessButton = styled(Button)`
+const SuccessButton = styled(Button).attrs((props: { updateAlert: boolean }) => ({
+	updateAlert: props.updateAlert
+}))`
 	border: solid 2px ${props => props.theme.success ? props.theme.success : success};
 	background-color: ${props => props.theme.success ? props.theme.success : success};
 `;
