@@ -6,7 +6,7 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { IoMdAlert, IoMdAdd } from "react-icons/io";
 import { SuccessButton, DangerButton, WarningButton } from "./styled/button";
 import { DangerAlert } from "./styled/alert";
-import Cms from "./styled/cms";
+import { Cms, CmsBody } from "./styled/cms";
 import "../styles/index.scss";
 
 interface BasicCmsComponentEntry {
@@ -388,7 +388,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 						</div>
 					</SuccessButton>
 				</div>
-				<div className="cms-body">
+				<CmsBody className="cms-body">
 					<div className="components">
 						<>
 							{
@@ -412,7 +412,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 							))
 						}
 					</div>
-				</div>
+				</CmsBody>
 			</Cms>
 		);
 	}
