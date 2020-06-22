@@ -4,7 +4,8 @@ import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { IoMdAlert, IoMdAdd } from "react-icons/io";
-import { SuccessButton, DangerButton } from "./styled/button";
+import { SuccessButton, DangerButton, WarningButton } from "./styled/button";
+import { DangerAlert } from "./styled/alert";
 import Cms from "./styled/cms";
 import "../styles/index.scss";
 
@@ -46,6 +47,8 @@ interface CmsPageState {
 	componentsForThisPage: CmsComponent[];
 	needsUpdateAlert: boolean;
 	componentList: { name: string, slug: string, component?: React.ComponentType }[]
+	loadError: boolean;
+	loadErrorMessage?: string;
 }
 
 
@@ -54,6 +57,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	state = {
 		componentsForThisPage: [],
 		needsUpdateAlert: false,
+		loadError: false,
+		loadErrorMessage: "",
 		componentList: [
 			{
 				name: "short text",
@@ -80,7 +85,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 	static defaultProps = {
 		otherRoutes: [],
-		apiRoute: "http://localhost:8080",
 		logo: null,
 		customComponents: []
 	}
@@ -115,11 +119,14 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				return remappedComponent;
 			});
 
-			this.setState({
+			self.setState({
 				componentsForThisPage: remappedData
 			});
 		}).catch((err: AxiosError) => {
-			console.log(err);
+			self.setState({
+				loadError: true,
+				loadErrorMessage: err.message
+			});
 		})
 
 	}
@@ -339,8 +346,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	}
 
 	render(){
-		const { otherRoutes, logo } = this.props;
-		const { componentsForThisPage, needsUpdateAlert, componentList } = this.state;
+		const { otherRoutes, logo, apiRoute } = this.props;
+		const { componentsForThisPage, needsUpdateAlert, componentList, loadError, loadErrorMessage } = this.state;
 		return (
 			<Cms className="cms-page">
 				<div className={`cms-header ${logo ? "with-logo" : "without-logo"}`}>
@@ -361,10 +368,19 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					}
 				</div>
 				<br />
+				{
+					loadError &&
+						<DangerAlert>
+							{`Unable to get CMS data from ${apiRoute}. (${loadErrorMessage})`}
+						</DangerAlert>
+				}
 				<div className="cms-page-options">
 					<DangerButton className="cms-option">
 						Cancel
 					</DangerButton>
+					<WarningButton className="cms-option" onClick={this.loadComponentData}>
+						Load CMS Data
+					</WarningButton>
 					<SuccessButton onClick={() => this.saveCmsData()} className={`cms-option ${needsUpdateAlert ? "not-updated" : ""}`}>
 						<div style={{ display: "flex" }}>
 							{needsUpdateAlert && <p><IoMdAlert color="white" style={{ width: "25px", height: "25px" }} /></p>}

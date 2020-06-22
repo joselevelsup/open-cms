@@ -27,7 +27,7 @@ function OpenCms(props: MainAppProps) {
 		<ThemeProvider theme={theme}>
 			<CmsPage 
 				otherRoutes={routes} 
-				apiRoute={apiAddress ? `${apiAddress}${routes[r].apiRoute}` : routes[r].apiRoute} 
+				apiRoute={`${apiAddress}${routes[r].apiRoute}`} 
 				logo={logo}
 				customComponents={components}
 			/>
@@ -41,6 +41,7 @@ function OpenCms(props: MainAppProps) {
 }
 
 OpenCms.defaultProps = {
+	apiAddress: "http://localhost:8080",
 	routes: [
 		{
 			name: "home page",

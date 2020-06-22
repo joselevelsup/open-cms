@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const danger = "#f6511dff";
 const success = "#7fb800ff";
+const warning = "#ffb400ff";
 
 const Button = styled.button`
 	color: white;
@@ -19,7 +20,13 @@ const SuccessButton = styled(Button)`
 	background-color: ${props => props.theme.success ? props.theme.success : success};
 `;
 
+const WarningButton = styled(Button)`
+	border: solid 2px ${props => props.theme.warning ? props.theme.warning : warning};
+	background-color: ${props => props.theme.warning ? props.theme.warning : warning};
+`;
+
 export {
 	DangerButton,
-	SuccessButton
+	SuccessButton,
+	WarningButton
 }
