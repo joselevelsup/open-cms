@@ -15,10 +15,6 @@ body {
 
 .cms-page {
 	.cms-header{
-		display: flex;
-		flex-direction: row;
-		flex: 1;
-		background-color: white;
 		&.with-logo {
 			padding: 6px 0;
 		}
@@ -56,6 +52,7 @@ body {
 		button.cms-option {
 			margin-left: 10px;
 			border: solid 2px transparent;
+			//TODO: Remove not-updated class and add it to styled component file
 			&.not-updated {
 				padding-top: 0;
 				padding-bottom: 0;

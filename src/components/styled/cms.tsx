@@ -1,11 +1,30 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const pageColor = "#d4e4ff";
+const headerColor = "white";
 
 const Cms = styled.div`
 	width: 100%;
 	height: 100%;
 	background-color: ${props => props.theme.pageColor ? props.theme.pageColor : pageColor};
+`;
+
+const CmsHeader = styled.div.attrs((props: { logo: string }) => ({
+	logo: props.logo ? true : false
+}))`
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	background-color: ${props => props.theme.headerColor ? props.theme.headerColor : headerColor};
+	${props => props.logo ? 
+		css`
+			padding: 6px 0;
+		` 
+		: 
+		css`
+			padding: 25px 10px;
+		`
+	}
 `;
 
 const CmsBody = styled.div`
@@ -17,5 +36,6 @@ const CmsBody = styled.div`
 
 export {
 	Cms,
+	CmsHeader,
 	CmsBody
 };

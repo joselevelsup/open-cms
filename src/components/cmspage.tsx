@@ -6,7 +6,7 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { IoMdAlert, IoMdAdd } from "react-icons/io";
 import { SuccessButton, DangerButton, WarningButton } from "./styled/button";
 import { DangerAlert } from "./styled/alert";
-import { Cms, CmsBody } from "./styled/cms";
+import { Cms, CmsHeader, CmsBody } from "./styled/cms";
 import "../styles/index.scss";
 
 interface BasicCmsComponentEntry {
@@ -350,7 +350,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		const { componentsForThisPage, needsUpdateAlert, componentList, loadError, loadErrorMessage } = this.state;
 		return (
 			<Cms className="cms-page">
-				<div className={`cms-header ${logo ? "with-logo" : "without-logo"}`}>
+				<CmsHeader className="cms-header" logo={logo}>
 					{
 						logo &&
 							<div className="header-logo">
@@ -366,7 +366,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 							</div>
 						))
 					}
-				</div>
+				</CmsHeader>
 				<br />
 				{
 					loadError &&
@@ -381,7 +381,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					<WarningButton className="cms-option" onClick={this.loadComponentData}>
 						Load CMS Data
 					</WarningButton>
-					<SuccessButton onClick={() => this.saveCmsData()} className={`cms-option ${needsUpdateAlert ? "not-updated" : ""}`}>
+					<SuccessButton onClick={() => this.saveCmsData()} updateAlert={needsUpdateAlert} className="cms-option">
 						<div style={{ display: "flex" }}>
 							{needsUpdateAlert && <p><IoMdAlert color="white" style={{ width: "25px", height: "25px" }} /></p>}
 							<p> Save Changes</p>
