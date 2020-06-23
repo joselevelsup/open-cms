@@ -4,8 +4,9 @@ import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { IoMdAlert, IoMdAdd } from "react-icons/io";
-import { SuccessButton, DangerButton } from "./styled/button";
-import Cms from "./styled/cms";
+import { SuccessButton, DangerButton, WarningButton } from "./styled/button";
+import { DangerAlert } from "./styled/alert";
+import { Cms, CmsHeader, CmsBody } from "./styled/cms";
 import "../styles/index.scss";
 
 interface BasicCmsComponentEntry {
@@ -46,6 +47,8 @@ interface CmsPageState {
 	componentsForThisPage: CmsComponent[];
 	needsUpdateAlert: boolean;
 	componentList: { name: string, slug: string, component?: React.ComponentType }[]
+	loadError: boolean;
+	loadErrorMessage?: string | null;
 }
 
 
@@ -54,6 +57,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	state = {
 		componentsForThisPage: [],
 		needsUpdateAlert: false,
+		loadError: false,
+		loadErrorMessage: "",
 		componentList: [
 			{
 				name: "short text",
@@ -80,8 +85,49 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 
 	static defaultProps = {
 		otherRoutes: [],
-		apiRoute: "http://localhost:8080",
-		logo: null
+		logo: null,
+		customComponents: []
+	}
+
+	loadComponentData = async () => {
+		const { apiRoute } = this.props;
+		const self = this;
+
+		axios.get(apiRoute).then((resp: AxiosResponse) => {
+			const { data } = resp;
+			let remappedData = data.map(t => {
+				let remappedComponent = {};
+				if(t.type == "nested"){
+					let remappedNestedComponents = t.components.map(tc => ({
+						[`${tc.type}-${tc.id}`]: {
+							"title": tc.title,
+							"value": tc.value
+						}
+					}));
+					remappedComponent[`${t.type}-${t.id}`] = {
+						"title": t.title,
+						"components": remappedNestedComponents
+					}
+				} else {
+					remappedComponent[`${t.type}-${t.id}`] = {
+						"title": t.title,
+						"value": t.value
+					}
+				}
+
+				return remappedComponent;
+			});
+
+			self.setState({
+				componentsForThisPage: remappedData
+			});
+		}).catch((err: AxiosError) => {
+			self.setState({
+				loadError: true,
+				loadErrorMessage: err.message
+			});
+		})
+
 	}
 
 	componentDidMount(){
@@ -96,6 +142,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				componentList: [...state.componentList, ...newComponents]
 			}));
 		}
+
+		this.loadComponentData();
 	}
 
 	componentDidUpdate(_prevProps: CmsPageProps, prevState: CmsPageState){
@@ -162,8 +210,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					}
 				};
 			}
-
-
 
 			return {
 				componentsForThisPage: currentComponents
@@ -297,11 +343,11 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 	}
 
 	render(){
-		const { otherRoutes, logo } = this.props;
-		const { componentsForThisPage, needsUpdateAlert, componentList } = this.state;
+		const { otherRoutes, logo, apiRoute } = this.props;
+		const { componentsForThisPage, needsUpdateAlert, componentList, loadError, loadErrorMessage } = this.state;
 		return (
 			<Cms className="cms-page">
-				<div className={`cms-header ${logo ? "with-logo" : "without-logo"}`}>
+				<CmsHeader className="cms-header" logo={logo}>
 					{
 						logo &&
 							<div className="header-logo">
@@ -317,35 +363,42 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 							</div>
 						))
 					}
-				</div>
+				</CmsHeader>
 				<br />
+				{
+					loadError &&
+						<DangerAlert>
+							{`Unable to get CMS data from ${apiRoute}. (${loadErrorMessage})`}
+						</DangerAlert>
+				}
 				<div className="cms-page-options">
 					<DangerButton className="cms-option">
 						Cancel
 					</DangerButton>
-					<SuccessButton onClick={() => this.saveCmsData()} className={`cms-option ${needsUpdateAlert ? "not-updated" : ""}`}>
+					<WarningButton className="cms-option" onClick={this.loadComponentData}>
+						Load CMS Data
+					</WarningButton>
+					<SuccessButton onClick={() => this.saveCmsData()} updateAlert={needsUpdateAlert} className="cms-option">
 						<div style={{ display: "flex" }}>
 							{needsUpdateAlert && <p><IoMdAlert color="white" style={{ width: "25px", height: "25px" }} /></p>}
 							<p> Save Changes</p>
 						</div>
 					</SuccessButton>
 				</div>
-				<div className="cms-body">
+				<CmsBody className="cms-body">
 					<div className="components">
-						<>
-							{
-								componentList.map((c: any, i: number) => (
-									<div className="component-item" key={i}>
-										<p>
-											{c.name}
-										</p>
-										<SuccessButton onClick={() => this.addComponentToList(c.slug)}>
-											<IoMdAdd color="white" style={{ width: "16px", height: "16px"}} />
-										</SuccessButton>
-									</div>
-								))
-							}
-						</>
+						{
+							componentList.map((c: any, i: number) => (
+								<div className="component-item" key={i}>
+									<p>
+										{c.name}
+									</p>
+									<SuccessButton onClick={() => this.addComponentToList(c.slug)}>
+										<IoMdAdd color="white" style={{ width: "16px", height: "16px"}} />
+									</SuccessButton>
+								</div>
+							))
+						}
 					</div>
 					<div className="main">
 						{
@@ -354,7 +407,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 							))
 						}
 					</div>
-				</div>
+				</CmsBody>
 			</Cms>
 		);
 	}

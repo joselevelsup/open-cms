@@ -116,7 +116,7 @@ const customComponents = [
     "title": "linked title",
     "slug": "linked-title",
     "value": "http://google.com",
-    "type": "link-3"
+    "type": "link"
   }
 ]
 ```
