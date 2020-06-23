@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const danger = "#f6511dff";
 const success = "#7fb800ff";
@@ -20,6 +20,20 @@ const SuccessButton = styled(Button).attrs((props: { updateAlert: boolean }) => 
 }))`
 	border: solid 2px ${props => props.theme.success ? props.theme.success : success};
 	background-color: ${props => props.theme.success ? props.theme.success : success};
+	${
+		props => props.updateAlert && 
+			css`
+				padding-top: 0;
+				padding-bottom: 0;
+				> p {
+					margin-top: auto;
+					margin-bottom: auto;
+				}
+				p:last-child{
+					padding-left: 6px;
+				}
+			`
+	}
 `;
 
 const WarningButton = styled(Button)`

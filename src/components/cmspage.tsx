@@ -48,7 +48,7 @@ interface CmsPageState {
 	needsUpdateAlert: boolean;
 	componentList: { name: string, slug: string, component?: React.ComponentType }[]
 	loadError: boolean;
-	loadErrorMessage?: string;
+	loadErrorMessage?: string | null;
 }
 
 
@@ -94,7 +94,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		const self = this;
 
 		axios.get(apiRoute).then((resp: AxiosResponse) => {
-			console.log(resp);
 			const { data } = resp;
 			let remappedData = data.map(t => {
 				let remappedComponent = {};
@@ -211,8 +210,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 					}
 				};
 			}
-
-
 
 			return {
 				componentsForThisPage: currentComponents
@@ -390,20 +387,18 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				</div>
 				<CmsBody className="cms-body">
 					<div className="components">
-						<>
-							{
-								componentList.map((c: any, i: number) => (
-									<div className="component-item" key={i}>
-										<p>
-											{c.name}
-										</p>
-										<SuccessButton onClick={() => this.addComponentToList(c.slug)}>
-											<IoMdAdd color="white" style={{ width: "16px", height: "16px"}} />
-										</SuccessButton>
-									</div>
-								))
-							}
-						</>
+						{
+							componentList.map((c: any, i: number) => (
+								<div className="component-item" key={i}>
+									<p>
+										{c.name}
+									</p>
+									<SuccessButton onClick={() => this.addComponentToList(c.slug)}>
+										<IoMdAdd color="white" style={{ width: "16px", height: "16px"}} />
+									</SuccessButton>
+								</div>
+							))
+						}
 					</div>
 					<div className="main">
 						{

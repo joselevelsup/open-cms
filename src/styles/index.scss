@@ -15,13 +15,6 @@ body {
 
 .cms-page {
 	.cms-header{
-		&.with-logo {
-			padding: 6px 0;
-		}
-
-		&.without-logo {
-			padding: 25px 10px;
-		}
 		.route-link {
 			margin: auto 0;
 			padding-right: 12px;
@@ -51,21 +44,8 @@ body {
 		border-radius: 3px;
 		button.cms-option {
 			margin-left: 10px;
-			border: solid 2px transparent;
-			//TODO: Remove not-updated class and add it to styled component file
-			&.not-updated {
-				padding-top: 0;
-				padding-bottom: 0;
-				p {
-					margin-top: auto;
-					margin-bottom: auto;
-					&:last-child{
-						margin-left: 6px;
-					}
-				}
-			}
 			p {
-				margin: 0;
+				margin: auto;
 			}
 		}
 	}
