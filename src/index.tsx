@@ -2,6 +2,7 @@ import * as React from "react";
 import { useRoutes } from "hookrouter";
 import { ThemeProvider } from "styled-components";
 import CmsPage from "./components/cmspage";
+import UserCms from "./components/userpage";
 import { slugify } from "./util";
 
 export type CmsRoute = {
@@ -34,6 +35,12 @@ function OpenCms(props: MainAppProps) {
 		</ThemeProvider>
 		) 
 	}
+
+	remappedRoutes["/admin/users"] = () => (
+		<ThemeProvider theme={theme}>
+			<UserCms apiAddress={apiAddress} otherRoutes={routes} />		
+		</ThemeProvider>
+	)
 
 	const router = useRoutes(remappedRoutes);
 
