@@ -4,8 +4,8 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc --project tsconfig.json",
+    "test": "jest",
+    "build": "tsc --project tsconfig.json",
     "dev": "parcel public/index.html"
   },
   "keywords": [],
@@ -21,12 +21,37 @@
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/hookrouter": "^2.2.2",
+    "@types/jest": "^26.0.0",
     "@types/node": "^14.0.5",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.5.0",
+    "jest": "^26.1.0",
+    "raf": "^3.4.1",
     "sass": "^1.26.5",
+    "ts-jest": "^26.1.1",
     "typescript": "^3.9.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "setupFiles": [
+      "raf/polyfill"
+    ],
+    "testRegex": "/tests/.*\\.(tsx)$",
+    "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTests.ts",
+		"snapshotSerializers": ["enzyme-to-json"]
   }
 }

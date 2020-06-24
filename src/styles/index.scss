@@ -12,7 +12,6 @@ body {
 	font-family: 'Assistant', sans-serif;
 }
 
-
 .cms-page {
 	.cms-header{
 		.route-link {
@@ -147,6 +146,13 @@ body {
 						margin: auto;
 					}
 				}
+			}
+		}
+
+		.user-table{
+			width: 100%;
+			.user-options {
+				float: right;
 			}
 		}
 	}

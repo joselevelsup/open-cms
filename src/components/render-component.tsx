@@ -107,7 +107,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[], child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
 	const typeOfInput: string = removeLastItem(splitKey);
-	const CustomComponent: React.ComponentType = componentList.find(c => c.slug == typeOfInput).component;
+	const CustomComponent: any = componentList.find(c => c.slug == typeOfInput).component;
 	return (
 		<div className="custom">
 			<CustomComponent onComponentChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} nested={child} name={slugKey} />
