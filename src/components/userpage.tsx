@@ -6,6 +6,11 @@ import { Cms, CmsHeader, CmsBody } from "./styled/cms";
 import { DangerAlert } from "./styled/alert";
 import { slugify } from "../util";
 
+interface UserInfo {
+	id: string | number;
+	[key: string]: any
+}
+
 interface UserCmsProps {
 	apiAddress: string;
 	userRoute?: string;
@@ -17,8 +22,9 @@ interface UserCmsProps {
 interface UserCmsState {
 	deleteModal: boolean;
 	editModal: boolean;
-	users: any[];
-	loadErrorMessage: string | null;
+	users: UserInfo[];
+	errorMessage: string | null;
+	successMessage: string | null;
 }
 
 export default class UserCms extends React.Component<UserCmsProps, UserCmsState> {
@@ -26,8 +32,16 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	state = {
 		deleteModal: false,
 		editModal: false,
-		users: [],
-		loadErrorMessage: null
+		users: [
+			{
+				id: 1,
+				firstName: "jack",
+				lastName: "dorsey",
+				email: "jdorsey@mail.com",
+			}
+		],
+		errorMessage: null,
+		successMessage: null
 	};
 
 	static defaultProps = {
@@ -44,15 +58,11 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 			{
 				name: "Email",
 				key: "email"
-			},
-			{
-				name: "Password",
-				key: "password"
 			}
 		]
 	}
 
-	componentDidMount(){
+	retreiveUsers = () => {
 		const { apiAddress, userRoute } = this.props;
 		const self = this;
 		axios.get(`${apiAddress}${userRoute}`).then((resp: AxiosResponse) => {
@@ -65,9 +75,13 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 			}
 		}).catch((err: AxiosError) => {
 			self.setState({
-				loadErrorMessage: `Error loading Users from ${apiAddress}${userRoute} (${err.message})`
+				errorMessage: `Error loading Users from ${apiAddress}${userRoute} (${err.message})`
 			});
 		})
+	}
+
+	componentDidMount(){
+		/* this.retreiveUsers(); */
 	}
 
 	toggleDeleteUserModal = () => this.setState(state => ({
@@ -76,20 +90,30 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 
 	deleteUser = (id: string | number) => {
 		const { apiAddress, userRoute } = this.props;
-		axios.delete(`${apiAddress}${userRoute}`, {
-			data: {
-				userId: id
-			}
-		}).then((resp: AxiosResponse) => {
-			
-		}).catch((err: AxiosError) => {
-
-		})
+		const self = this;
+		let confirmDeleteUser = confirm("Are you sure you want to delete this user?");
+		if(confirmDeleteUser){
+			axios.delete(`${apiAddress}${userRoute}`, {
+				data: {
+					userId: id
+				}
+			}).then((resp: AxiosResponse) => {
+				if(resp.status == 200){
+					self.setState({
+						successMessage: "Successfully deleted User!"
+					});
+				}
+			}).catch((err: AxiosError) => {
+				self.setState({
+					errorMessage: `Error loading Users from ${apiAddress}${userRoute} (${err.message})`
+				});
+			})
+		}
 	}
 
 	render(){
 		const { logo, otherRoutes, userConfig } = this.props;
-		const { users, loadErrorMessage } = this.state;
+		const { users, errorMessage } = this.state;
 		return (
 			<Cms className="cms-page">
 				<CmsHeader className="cms-header" logo={logo}>
@@ -111,36 +135,43 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 				</CmsHeader>
 				<br />
 				{
-					loadErrorMessage &&
+					errorMessage &&
 						<DangerAlert>
-							{loadErrorMessage}
+							{errorMessage}
 						</DangerAlert>
 				}
 				<CmsBody className="cms-body">
 					<table className="user-table">
-						<tr>
+						<thead>
+							<tr>
+								<th>ID</th>
+								{
+									userConfig.map((uc: { name: string, key: string }) => (
+										<th>{uc.name}</th>
+									))
+								}
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
 							{
-								userConfig.map((uc: { name: string, key: string }) => (
-									<th>{uc.name}</th>
+								users && users.map((u: UserInfo) => (
+									<tr>
+										<td>{u.id}</td>
+										{
+											userConfig.map((uc: { name: string, key: string }) => (
+												<td>{u[uc.key]}</td>
+											))
+										}
+										<td className="user-options">
+											<SuccessButton>Reset Password</SuccessButton>
+											{" "}
+											<DangerButton onClick={() => this.deleteUser(u.id)}>Delete User</DangerButton>
+										</td>
+									</tr>
 								))
 							}
-						</tr>
-						{
-							users && users.map((u: any) => (
-								<tr>
-									{
-										userConfig.map((uc: { name: string, key: string }) => (
-											<td>{u[uc.key]}</td>
-										))
-									}
-									<td className="user-options">
-										<SuccessButton>Reset Password</SuccessButton>
-										{" "}
-										<DangerButton onClick={() => this.toggleDeleteUserModal}>Delete User</DangerButton>
-									</td>
-								</tr>
-							))
-						}
+						</tbody>
 					</table>
 				</CmsBody>
 			</Cms>

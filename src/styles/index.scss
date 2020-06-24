@@ -151,6 +151,20 @@ body {
 
 		.user-table{
 			width: 100%;
+			background-color: white;
+			padding: 10px;
+			border: 0; 
+			border-collapse: separate; 
+			border-spacing: 0 5px;
+			thead > tr > th {
+				border-bottom: solid 2px black;
+			}
+			tbody > tr > td {
+				border-right: solid 1.5px black;
+			}
+			td {
+				text-align: center;
+			}
 			.user-options {
 				float: right;
 			}
