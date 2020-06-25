@@ -149,24 +149,30 @@ body {
 			}
 		}
 
-		.user-table{
+		.user-table-content {
+			padding: 10px;
 			width: 100%;
 			background-color: white;
-			padding: 10px;
-			border: 0; 
-			border-collapse: separate; 
-			border-spacing: 0 5px;
-			thead > tr > th {
-				border-bottom: solid 2px black;
-			}
-			tbody > tr > td {
-				border-right: solid 1.5px black;
-			}
-			td {
-				text-align: center;
-			}
-			.user-options {
-				float: right;
+			.user-table{
+				width: 100%;
+				border: 0; 
+				border-collapse: collapse; 
+				thead > tr > th {
+					border-bottom: solid 2px black;
+					padding: 8px;
+				}
+				tbody > tr {
+					border-bottom: solid 2px black;
+				}
+				td {
+					text-align: center;
+					&:last-child {
+						padding: 10px;
+					}
+				}
+				.user-options {
+					float: right;
+				}
 			}
 		}
 	}

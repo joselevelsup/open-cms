@@ -32,14 +32,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	state = {
 		deleteModal: false,
 		editModal: false,
-		users: [
-			{
-				id: 1,
-				firstName: "jack",
-				lastName: "dorsey",
-				email: "jdorsey@mail.com",
-			}
-		],
+		users: [],
 		errorMessage: null,
 		successMessage: null
 	};
@@ -81,7 +74,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	}
 
 	componentDidMount(){
-		/* this.retreiveUsers(); */
+		this.retreiveUsers();
 	}
 
 	toggleDeleteUserModal = () => this.setState(state => ({
@@ -102,12 +95,57 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 					self.setState({
 						successMessage: "Successfully deleted User!"
 					});
+					self.retreiveUsers();
 				}
 			}).catch((err: AxiosError) => {
 				self.setState({
 					errorMessage: `Error loading Users from ${apiAddress}${userRoute} (${err.message})`
 				});
 			})
+		}
+	}
+
+	sendResetPassword = (id: string | number) => {
+		const { apiAddress, userRoute } = this.props;
+		const self = this;
+
+		let confirmResetUserPass = confirm("Reset this User's password?");
+
+		if(confirmResetUserPass){
+			let resetPasswordPrompt = prompt("Enter new password (Leave empty if sending instructions)", "");
+			if(resetPasswordPrompt !== null){
+				if(resetPasswordPrompt.length >= 1){
+					axios.put(`${apiAddress}${userRoute}`, {
+						data: {
+							userId: id,
+							newPassword: resetPasswordPrompt
+						}
+					}).then((resp: AxiosResponse) => {
+						self.setState({
+							successMessage: "New Password set"
+						});
+					}).catch((err: AxiosError) => {
+						self.setState({
+							errorMessage: `Error (${err.message})`
+						});
+					});
+				}
+				if(resetPasswordPrompt.length < 1){
+					axios.put(`${apiAddress}${userRoute}`, {
+						data: {
+							userId: id
+						}
+					}).then((resp: AxiosResponse) => {
+						self.setState({
+							successMessage: "User sent reset password instructions"
+						});
+					}).catch((err: AxiosError) => {
+						self.setState({
+							errorMessage: `Error (${err.message})`
+						});
+					});
+				}
+			}
 		}
 	}
 
@@ -141,38 +179,40 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 						</DangerAlert>
 				}
 				<CmsBody className="cms-body">
-					<table className="user-table">
-						<thead>
-							<tr>
-								<th>ID</th>
+					<div className="user-table-content">
+						<table className="user-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									{
+										userConfig.map((uc: { name: string, key: string }) => (
+											<th>{uc.name}</th>
+										))
+									}
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
 								{
-									userConfig.map((uc: { name: string, key: string }) => (
-										<th>{uc.name}</th>
+									users && users.map((u: UserInfo) => (
+										<tr>
+											<td>{u.id}</td>
+											{
+												userConfig.map((uc: { name: string, key: string }) => (
+													<td>{u[uc.key]}</td>
+												))
+											}
+											<td className="user-options">
+												<SuccessButton onClick={() => this.sendResetPassword(u.id)}>Reset Password</SuccessButton>
+												{" "}
+												<DangerButton onClick={() => this.deleteUser(u.id)}>Delete User</DangerButton>
+											</td>
+										</tr>
 									))
 								}
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							{
-								users && users.map((u: UserInfo) => (
-									<tr>
-										<td>{u.id}</td>
-										{
-											userConfig.map((uc: { name: string, key: string }) => (
-												<td>{u[uc.key]}</td>
-											))
-										}
-										<td className="user-options">
-											<SuccessButton>Reset Password</SuccessButton>
-											{" "}
-											<DangerButton onClick={() => this.deleteUser(u.id)}>Delete User</DangerButton>
-										</td>
-									</tr>
-								))
-							}
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</div>
 				</CmsBody>
 			</Cms>
 		)
