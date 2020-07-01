@@ -120,6 +120,39 @@ const customComponents = [
   }
 ]
 ```
+## User Admin Panel
+
+After some feedback from a colleague, it was noticed that this CMS was missing something important. A User Admin Panel. A place for you to deal with your current users. __PLEASE NOTE__ if needed I'll add a way to add users. 
+
+### What can I do on this panel?
+
+- View your current users
+- Reset Passwords
+- Delete Users (Not by bulk)
+
+### How do I use this panel with my current db?
+
+Luckily there is a guide written on how to use these features huh?
+
+#### Viewing Users
+
+In order to view the data YOU want to see, you just need to provide an array of objects with a name and a key. For example:
+
+```javascript
+	[
+		{
+			name: "First Name",
+			key: "firstName"
+		},
+		{
+			name: "Email",
+			key: "email"
+		}
+		// etc
+	]
+```
+
+This is needed to help generate a chart and pull in the data from your response from your API. The name is what displays in a chart format and the key is what goes into your data and pulls it out. 
 
 
 ## What's left?
@@ -129,18 +162,22 @@ Well follow the table :P
 | Todo								        | In Progress									| Done	|
 |-----------------------------|-----------------------------|-------|
 | Theming								      |	:heavy_check_mark: (but some currently work)	| 			|
-| Basic Components						|															|	:heavy_check_mark:			|
-| Custom Components						|															| :heavy_check_mark:			|
-| Nested Components						|															| :heavy_check_mark:			|
+| Basic Components						|															|	:heavy_check_mark: |
+| Custom Components						|															| :heavy_check_mark: |
+| Nested Components						|															| :heavy_check_mark: |
 | Image Upload								|	:heavy_check_mark:					|				|
-| Sending Data								| :heavy_check_mark:					|				|
+| Sending Data								|															|	:heavy_check_mark: |
 |	Mobile View									|															|				|
 |	Testing with Other Routers	|															|				|
 | This Readme									|	:heavy_check_mark:					|				|
+| User Admin Panel						|															|	:heavy_check_mark: |
+| Lock Down Panel							| :heavy_check_mark:					|				|
 
 
 
 ## Please keep in mind that this is all still WIP
+
+*Screenshots to come!*
 
 
 
