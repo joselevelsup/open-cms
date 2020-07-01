@@ -40,7 +40,7 @@ interface CmsPageProps {
 	otherRoutes: [CmsRoute];
 	apiRoute: string;
 	customComponents?: { name: string, component: React.ComponentType }[];
-	logo: any;
+	logo?: any;
 }
 
 interface CmsPageState {

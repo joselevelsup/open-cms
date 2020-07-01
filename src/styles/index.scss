@@ -12,7 +12,6 @@ body {
 	font-family: 'Assistant', sans-serif;
 }
 
-
 .cms-page {
 	.cms-header{
 		.route-link {
@@ -146,6 +145,33 @@ body {
 					a {
 						margin: auto;
 					}
+				}
+			}
+		}
+
+		.user-table-content {
+			padding: 10px;
+			width: 100%;
+			background-color: white;
+			.user-table{
+				width: 100%;
+				border: 0; 
+				border-collapse: collapse; 
+				thead > tr > th {
+					border-bottom: solid 2px black;
+					padding: 8px;
+				}
+				tbody > tr {
+					border-bottom: solid 2px black;
+				}
+				td {
+					text-align: center;
+					&:last-child {
+						padding: 10px;
+					}
+				}
+				.user-options {
+					float: right;
 				}
 			}
 		}

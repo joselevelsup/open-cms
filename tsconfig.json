@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",                          
+    "module": "commonjs",                     
+    "strict": false,
+		"noImplicitAny": false,
+    "moduleResolution": "node",
+    "rootDirs": ["./src"],
+		"outDir": "./build",
+    "esModuleInterop": true,                  
+		"skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+		"jsx": "react"
+  },
+	"include": ["./src/**/*"],
+	"exclude": ["./node_modules/"]
+}
