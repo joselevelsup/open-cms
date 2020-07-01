@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeLastItem = exports.containsAny = exports.slugify = exports.firstObjectKey = void 0;
 exports.firstObjectKey = function (obj) {
     return Object.keys(obj)[0];
 };

@@ -1,0 +1,179 @@
+$danger: #f6511dff;
+$warning: #ffb400ff;
+$secondary: #00a6edff;
+$success: #7fb800ff;
+$dark: #0d2c54ff;
+$boxShadowColor: #c2c6cc;
+
+@import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
+
+body {
+	margin: 0;
+	font-family: 'Assistant', sans-serif;
+}
+
+.cms-page {
+	.cms-header{
+		.route-link {
+			margin: auto 0;
+			padding-right: 12px;
+			background-color: transparent;
+			a {
+				text-decoration: none;
+				text-transform: capitalize;
+				color: $dark;
+			}
+		}
+		.header-logo {
+			max-width: 60px;
+			max-height: 60px;
+			margin: 0 10px;
+			img {
+				max-width: inherit;
+			}
+		}
+	}
+	.cms-page-options {
+		display: flex;
+		flex-direction: row-reverse;
+		background-color: white;
+		padding: 15px 10px;
+		margin: 0 5px;
+		box-shadow: 2px 1px 10px $boxShadowColor;
+		border-radius: 3px;
+		button.cms-option {
+			margin-left: 10px;
+			p {
+				margin: auto;
+			}
+		}
+	}
+	.cms-body {
+		div {
+			padding: 8px;
+		}
+		.components {
+			flex-basis: 250px;
+			background-color: white;
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			.component-item {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				p{
+					margin-top: auto;
+					margin-bottom: auto;
+					text-transform: capitalize;
+				}
+				button {
+					padding: 5px 11px;
+				}
+			}
+		}
+		.main {
+			flex-grow: 1;
+			padding-top: 0;
+			padding-right: 0;
+			.component-container {
+				padding-top: 0;
+				padding-right: 0;
+				display: flex;
+				flex-direction: column;
+				.component-header {
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					background-color: white;
+					padding: 15px 10px;
+					flex-shrink: 1;
+					.component-title {
+						width: 30%;
+						height: 31px;
+						border: solid 1px $secondary;
+						border-radius: 3px;
+						padding: 0 10px;
+						margin-top: auto;
+					}
+					select.change-component {
+						width: 15%;
+						background-color: transparent!important;
+						padding: 10px;
+						border: solid 1px $secondary;
+						border-radius: 3px;
+					}
+				}
+				.component {
+					padding-top: 0;
+					background-color: white;
+					.component-input {
+						width: 100%;
+						height: 31px;
+						border: solid 1px $secondary;
+						border-radius: 3px;
+						padding: 10px;
+
+						&.textarea {
+							height: 60px;
+							resize: none;
+						}
+
+						&.link {
+							width: 90%;
+							margin-right: 10px;
+						}
+					}
+					.component-header{
+						padding-left: 0;
+						padding-right: 0;
+					}
+
+					.nested-component-footer{
+						margin: 15px;
+						display: flex;
+						flex-direction: column;
+						.add-component {
+							margin: auto;
+						}
+					}
+				}
+
+				.link-container {
+					display: flex;
+					flex-direction: row;
+					a {
+						margin: auto;
+					}
+				}
+			}
+		}
+
+		.user-table-content {
+			padding: 10px;
+			width: 100%;
+			background-color: white;
+			.user-table{
+				width: 100%;
+				border: 0; 
+				border-collapse: collapse; 
+				thead > tr > th {
+					border-bottom: solid 2px black;
+					padding: 8px;
+				}
+				tbody > tr {
+					border-bottom: solid 2px black;
+				}
+				td {
+					text-align: center;
+					&:last-child {
+						padding: 10px;
+					}
+				}
+				.user-options {
+					float: right;
+				}
+			}
+		}
+	}
+}

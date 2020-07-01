@@ -7,6 +7,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DangerAlert = void 0;
 var styled_components_1 = __importDefault(require("styled-components"));
 var danger = "#f6511dff";
 var Alert = styled_components_1.default.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\tdisplay: flex;\n\tflex-direction: column;\n\tpadding: 26px;\n\tmargin: 0 5px 10px 5px;\n\tcolor: white;\n"], ["\n\tdisplay: flex;\n\tflex-direction: column;\n\tpadding: 26px;\n\tmargin: 0 5px 10px 5px;\n\tcolor: white;\n"])));

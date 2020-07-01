@@ -3,6 +3,7 @@ import { useRoutes } from "hookrouter";
 import { ThemeProvider } from "styled-components";
 import CmsPage from "./components/cmspage";
 import UserCms from "./components/userpage";
+import Gate from "./components/gate";
 import { slugify } from "./util";
 
 export type CmsRoute = {
@@ -18,24 +19,36 @@ interface MainAppProps {
 	components?: { name: string, slug: string, component: React.ComponentType }[];
 	userPage: boolean;
 	userMap?: { name: string, key: string }[];
-	userRoute?: string
+	userRoute?: string;
+	locked?: boolean;
 }
 
-function OpenCms(props: MainAppProps) {
-	const { routes, theme, logo, apiAddress, components, userPage, userMap, userRoute } = props;
-	
+function OpenCms({
+	routes = [{ name: "home page", apiRoute: "/home" }],
+	theme = {},
+	logo = null,
+	apiAddress = "http://localhost:8080",
+	components = [],
+	userPage = true,
+	userMap = [],
+	userRoute = "/users",
+	locked = false
+}: MainAppProps) {
+
 	let remappedRoutes = {};
 
 	for(let r in routes){
 		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
-		<ThemeProvider theme={theme}>
-			<CmsPage 
-				otherRoutes={routes} 
-				apiRoute={`${apiAddress}${routes[r].apiRoute}`} 
-				logo={logo}
-				customComponents={components}
-			/>
-		</ThemeProvider>
+			<ThemeProvider theme={theme}>
+				<Gate locked={locked} routeTransfer={`/admin/${slugify(routes[r].name)}`}>
+					<CmsPage
+						otherRoutes={routes}
+						apiRoute={`${apiAddress}${routes[r].apiRoute}`}
+						logo={logo}
+						customComponents={components}
+					/>
+				</Gate>
+			</ThemeProvider>
 		) 
 	}
 
@@ -56,19 +69,5 @@ function OpenCms(props: MainAppProps) {
 
 	return router;
 }
-
-OpenCms.defaultProps = {
-	apiAddress: "http://localhost:8080",
-	routes: [
-		{
-			name: "home page",
-			apiRoute: "/home",
-		}
-	],
-	theme: {},
-	logo: null,
-	components: [],
-	userPage: true
-};
 
 export default OpenCms;
