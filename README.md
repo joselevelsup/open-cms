@@ -130,26 +130,23 @@ After some feedback from a colleague, it was noticed that this CMS was missing s
 - Reset Passwords
 - Delete Users (Not by bulk)
 
-### How do I use this panel with my current db?
-
-Luckily there is a guide written on how to use these features huh?
 
 #### Viewing Users
 
 In order to view the data YOU want to see, you just need to provide an array of objects with a name and a key. For example:
 
 ```javascript
-	[
-		{
-			name: "First Name",
-			key: "firstName"
-		},
-		{
-			name: "Email",
-			key: "email"
-		}
-		// etc
-	]
+[
+	{
+		name: "First Name",
+		key: "firstName"
+	},
+	{
+		name: "Email",
+		key: "email"
+	}
+	// etc
+]
 ```
 
 This is needed to help generate a chart and pull in the data from your response from your API. The name is what displays in a chart format and the key is what goes into your data and pulls it out. 
