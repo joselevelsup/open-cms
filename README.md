@@ -28,14 +28,14 @@ In order for the CMS to know what content is being related to what page, an arra
 
 ```javascript
 const routes = [
-	{
-		name: "home page", //String
-		apiRoute: "/home-page" //String - this can be whatever route you want to link to
-	},
-	{
-		name: "about page", //String
-		apiRoute: "/about-page" //String - this can be whatever route you want to link to
-	},
+  {
+    name: "home page", //String
+    apiRoute: "/home-page" //String - this can be whatever route you want to link to
+  },
+  {
+    name: "about page", //String
+    apiRoute: "/about-page" //String - this can be whatever route you want to link to
+  },
 ]
 
 <OpenCms routes={routes} />
@@ -49,9 +49,9 @@ By default, a colorscheme has been put in place. IF you don't like it, OH WELL! 
 
 ```javascript
 const theme = {
-	danger: "orange",
-	success: "lightgreen",
-	pageColor: "skyblue"
+  danger: "orange",
+  success: "lightgreen",
+  pageColor: "skyblue"
 };
 
 <OpenCms theme={theme} />
@@ -68,21 +68,21 @@ You only need to pass 2 props into your custom component.
 2. `name` - this is just the name the CMS gives your custom component. This name can change based on the position or if it is nested. 
 ```javascript
 const customComponents = [
-	{
-		name: "myComponent",
-		slug: "my-component",
-		component: ({ onComponentChange, name }) => {
-			const mdParser = new MarkdownIt();
-			return (
-				<MdEditor
-					value=""
-					style={{ height: "500px" }}
-					renderHTML={(text) => mdParser.render(text)}
-					onChange={(data) => onComponentChange(data.text, name)}
-				/>
-			)
-		}
-	}
+  {
+    name: "myComponent",
+    slug: "my-component",
+    component: ({ onComponentChange, name }) => {
+     const mdParser = new MarkdownIt();
+      return (
+       <MdEditor
+          value=""
+          style={{ height: "500px" }}
+          renderHTML={(text) => mdParser.render(text)}
+          onChange={(data) => onComponentChange(data.text, name)}
+        />
+      )
+    }
+  }
 ]
 
 <OpenCms components={customComponents} />
@@ -137,15 +137,15 @@ In order to view the data YOU want to see, you just need to provide an array of 
 
 ```javascript
 [
-	{
-		name: "First Name",
-		key: "firstName"
-	},
-	{
-		name: "Email",
-		key: "email"
-	}
-	// etc
+  {
+    name: "First Name",
+    key: "firstName"
+  },
+  {
+    name: "Email",
+    key: "email"
+  }
+  // etc
 ]
 ```
 
