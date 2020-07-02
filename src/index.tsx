@@ -32,7 +32,7 @@ function OpenCms({
 	userPage = true,
 	userMap = [],
 	userRoute = "/users",
-	locked = false
+	locked = true
 }: MainAppProps) {
 
 	let remappedRoutes = {};
@@ -40,14 +40,14 @@ function OpenCms({
 	for(let r in routes){
 		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
 			<ThemeProvider theme={theme}>
-				<Gate locked={locked} routeTransfer={`/admin/${slugify(routes[r].name)}`}>
+				<Gate locked={locked} component={
 					<CmsPage
 						otherRoutes={routes}
 						apiRoute={`${apiAddress}${routes[r].apiRoute}`}
 						logo={logo}
 						customComponents={components}
 					/>
-				</Gate>
+				}/>
 			</ThemeProvider>
 		) 
 	}
