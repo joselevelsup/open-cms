@@ -40,14 +40,14 @@ function OpenCms({
 	for(let r in routes){
 		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
 			<ThemeProvider theme={theme}>
-				<Gate locked={locked} component={
+				<Gate locked={locked} component={() => (
 					<CmsPage
 						otherRoutes={routes}
 						apiRoute={`${apiAddress}${routes[r].apiRoute}`}
 						logo={logo}
 						customComponents={components}
 					/>
-				}/>
+				)}/>
 			</ThemeProvider>
 		) 
 	}

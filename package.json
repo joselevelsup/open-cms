@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc --project tsconfig.json",
-		"postbuild": "copyfiles --flat ./src/styles/index.scss ./build/styles",
+    "postbuild": "copyfiles --flat ./src/styles/index.scss ./build/styles",
     "dev": "parcel src/index.html"
   },
   "keywords": [],
@@ -14,12 +14,14 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
+    "formik": "^2.1.4",
     "hookrouter": "^1.2.3",
     "parcel": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.5",
@@ -30,6 +32,7 @@
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.0",
+    "@types/yup": "^0.29.3",
     "copyfiles": "^2.3.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
