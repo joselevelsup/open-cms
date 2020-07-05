@@ -1,7 +1,7 @@
 import * as React from "react";
 import { firstObjectKey, containsAny, removeLastItem } from "../util";
+import { CmsInputHeader, CmsInput, CmsTextarea } from "./styled/input";
 import { DangerButton, SuccessButton } from "./styled/button";
-import { CmsInput, CmsTextarea } from "./styled/input";
 
 interface ComponentProps {
 	slug: any;
@@ -33,7 +33,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 
 	return (
 		<div className="component-header">
-			<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" type="text" />
+			<CmsInputHeader name={name} value={value} onChange={onChange} placeholder="Title?" type="text" />
 			{
 				!type.includes("nested") &&
 					<>
