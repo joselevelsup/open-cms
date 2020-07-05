@@ -57,6 +57,16 @@ const theme = {
 <OpenCms theme={theme} />
 ```
 
+| ThemeColor  | Default     |
+|-------------|-------------|
+| danger      | `#f6511dff` |
+| secondary   | `#00a6edff` |
+| success     | `#7fb800ff` |
+| warning     | `#ffb400ff` |
+| pageColor   | `#d4e4ff`   |
+| headerColor | `#000000`   |
+
+
 Now this is going to keep updating and the CMS will be customizable to the toe! Stay tuned ;)
 
 #### Custom Components
