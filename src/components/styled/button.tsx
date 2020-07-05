@@ -8,6 +8,9 @@ const Button = styled.button`
 	color: white;
 	padding: 10px 17px;
 	cursor: pointer;
+	&:focus {
+		outline: none;
+	}
 `;
 
 const DangerButton = styled(Button)`

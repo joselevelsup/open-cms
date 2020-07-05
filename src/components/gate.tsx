@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useFormik } from "formik";
 import { CmsInput } from "./styled/input";
+import { CmsForm } from "./styled/form";
+import { SuccessButton } from "./styled/button";
 import { randomId } from "../util";
 
 type GateProps = {
@@ -30,20 +32,25 @@ const LoginPane = ({ onLogin }: LoginPaneProps) => {
 	});
 
 	return (
-		<div>
+		<CmsForm>
 			<form onSubmit={handleSubmit}>
 				<div>
-					<CmsInput className="component-input" name="username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+					<CmsInput placeholder="Username" name="username" type="text" value={values.username} onChange={handleChange} onBlur={handleBlur} />
 				</div>
 				<div>
-					<CmsInput className="component-input" name="password" value={values.password} onChange={handleChange} onBlur={handleBlur} />
+					<CmsInput placeholder="Password" name="password" type="password" value={values.password} onChange={handleChange} onBlur={handleBlur} />
+				</div>
+				<div>
+					<SuccessButton type="submit">Login</SuccessButton>
 				</div>
 			</form>
-		</div>
+		</CmsForm>
 	);
 }
 
 const Gate = ({ locked, creds, component, customLoginPane }: GateProps) => {
+
+	const [ passThroughGate, setGatePass ] = React.useState<boolean>(false)
 
 	const checkSession = (): boolean => {
 		if(typeof localStorage == "undefined"){
@@ -72,6 +79,7 @@ const Gate = ({ locked, creds, component, customLoginPane }: GateProps) => {
 				if(typeof localStorage != "undefined"){
 					localStorage.setItem("sessionTime", Date.now().toString());
 					localStorage.setItem("sessionId", randomId(6));
+					setGatePass(true);
 				}
 			} else {
 				alert("Wrong username and/or password");
@@ -83,7 +91,7 @@ const Gate = ({ locked, creds, component, customLoginPane }: GateProps) => {
 	const RenderLoginComponent = customLoginPane;
 
 	if(locked){
-		if(checkSession()){
+		if(checkSession() || passThroughGate){
 			return <RenderComponent />;
 		} else {
 			if(customLoginPane){
