@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
-
-const pageColor = "#d4e4ff";
-const headerColor = "white";
+import { pageColor, headerColor } from "./colors";
 
 const Cms = styled.div`
 	width: 100%;
