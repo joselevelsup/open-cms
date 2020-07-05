@@ -156,10 +156,11 @@ This is needed to help generate a chart and pull in the data from your response 
 
 If you wanted to make sure no one has access to the CMS there is an option for that. 
 
-| Prop            | Type      | Required           | Description                                                                  | Default                                                         |
-|-----------------|-----------|--------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------|
-| locked          | boolean   | :heavy_check_mark: | Tells the CMS that you want the pages to be locked                           | false                                                           |
-| credentials     | object    |                    | You can put static username and password                                     | ```javascript { username: "admin", password: "password123" }``` |
+| Prop        | Type    | Required           | Description                                        | Default                                              |
+|-------------|---------|--------------------|----------------------------------------------------|------------------------------------------------------|
+| locked      | boolean | :heavy_check_mark: | Tells the CMS that you want the pages to be locked | false                                                |
+| credentials | object  |                    | You can put static username and password           | ```{ username: "admin", password: "password123" }``` |
+|             |         |                    |                                                    |                                                      |
 
 A login pane is already provided (for you to develop your own, that is coming soon!)
 
