@@ -13,13 +13,13 @@ Coming soon.
 
 ### Props
 
-| Prop Name  | Type							  | Required? | Default							  |
+| Prop Name  | Type               | Required? | Default               |
 |------------|--------------------|-----------|-----------------------|
-|	routes		 | array (see below)	| Yes			  | none									|
-| apiAddress | string						  | No				| http://localhost:8080 |
-| theme			 | object (see below) | No        |	{}									  |
-| logo			 | string						  | No        | null                  |
-| components | array (see below)  | No			  | []                    |
+| routes     | array (see below)  | Yes       | none                  |
+| apiAddress | string             | No        | http://localhost:8080 |
+| theme      | object (see below) | No        | {}                    |
+| logo       | string             | No        | null                  |
+| components | array (see below)  | No        | []                    |
 
 
 #### Routes
@@ -152,23 +152,38 @@ In order to view the data YOU want to see, you just need to provide an array of 
 This is needed to help generate a chart and pull in the data from your response from your API. The name is what displays in a chart format and the key is what goes into your data and pulls it out. 
 
 
+## Locking the CMS
+
+If you wanted to make sure no one has access to the CMS there is an option for that. 
+
+| Prop            | Type      | Required           | Description                                                                  | Default                                                         |
+|-----------------|-----------|--------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| locked          | boolean   | :heavy_check_mark: | Tells the CMS that you want the pages to be locked                           | false                                                           |
+| credentials     | object    |                    | You can put static username and password                                     | ```javascript { username: "admin", password: "password123" }``` |
+
+A login pane is already provided (for you to develop your own, that is coming soon!)
+
+Once you have successfully logged in, a `sessionId` and `sessionTime` is stored in your local storage. After 2 days or more, you will need to login once more. 
+
+
 ## What's left?
 
 Well follow the table :P
 
-| Todo								        | In Progress									| Done	|
-|-----------------------------|-----------------------------|-------|
-| Theming								      |	:heavy_check_mark: (but some currently work)	| 			|
-| Basic Components						|															|	:heavy_check_mark: |
-| Custom Components						|															| :heavy_check_mark: |
-| Nested Components						|															| :heavy_check_mark: |
-| Image Upload								|	:heavy_check_mark:					|				|
-| Sending Data								|															|	:heavy_check_mark: |
-|	Mobile View									|															|				|
-|	Testing with Other Routers	|															|				|
-| This Readme									|	:heavy_check_mark:					|				|
-| User Admin Panel						|															|	:heavy_check_mark: |
-| Lock Down Panel							| :heavy_check_mark:					|				|
+| Todo                       | In Progress                                  | Done               |
+|----------------------------|----------------------------------------------|--------------------|
+| Theming                    | :heavy_check_mark: (but some currently work) |                    |
+| Basic Components           |                                              | :heavy_check_mark: |
+| Custom Components          |                                              | :heavy_check_mark: |
+| Nested Components          |                                              | :heavy_check_mark: |
+| Image Upload               | :heavy_check_mark:                           |                    |
+| Sending Data               |                                              | :heavy_check_mark: |
+| Mobile View                |                                              |                    |
+| Testing with Other Routers |                                              |                    |
+| General Testing            | :heavy_check_mark:                           |                    |
+| This Readme                | :heavy_check_mark:                           |                    |
+| User Admin Panel           |                                              | :heavy_check_mark: |
+| Lock Down Panel            |                                              | :heavy_check_mark: |
 
 
 
