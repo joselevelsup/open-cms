@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var util_1 = require("../util");
+var input_1 = require("./styled/input");
 var button_1 = require("./styled/button");
 var ComponentHeader = function (_a) {
     var name = _a.name, value = _a.value, onChange = _a.onChange, removeComponent = _a.removeComponent, type = _a.type, changeComponent = _a.changeComponent, changeAvailable = _a.changeAvailable, componentlist = _a.componentlist;
@@ -30,7 +31,7 @@ var ComponentHeader = function (_a) {
         changeComponent(e);
     };
     return (React.createElement("div", { className: "component-header" },
-        React.createElement("input", { name: name, value: value, onChange: onChange, placeholder: "Title?", className: "component-title", type: "text" }),
+        React.createElement(input_1.CmsInputHeader, { name: name, value: value, onChange: onChange, placeholder: "Title?", type: "text" }),
         !type.includes("nested") &&
             React.createElement(React.Fragment, null, changeAvailable &&
                 React.createElement("select", { className: "change-component", name: "change-component", onChange: changeThisComponent, value: newComponentType }, componentlist.map(function (c) { return (React.createElement(React.Fragment, null, c.name !== "nested" &&
@@ -42,14 +43,14 @@ var renderActualComponent = function (slug, onCompTextChange, slugKey, child, pa
     var typeOfInput = util_1.removeLastItem(splitKey);
     switch (typeOfInput) {
         case "short-text":
-            return (React.createElement("input", { name: slugKey + "-value", type: "text", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input" }));
+            return (React.createElement(input_1.CmsInput, { name: slugKey + "-value", type: "text", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input" }));
         case "long-text":
-            return (React.createElement("textarea", { name: slugKey + "-value", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input textarea" }));
+            return (React.createElement(input_1.CmsTextarea, { name: slugKey + "-value", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input textarea" }));
         case "media":
             return (React.createElement("div", { className: "media-container" }));
         case "link":
             return (React.createElement("div", { className: "link-container" },
-                React.createElement("input", { name: slugKey + "-value", type: "text", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input link" }),
+                React.createElement(input_1.CmsInput, { name: slugKey + "-value", type: "text", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input link" }),
                 React.createElement("a", { href: slug[slugKey].value }, "Test this link")));
         default:
             return React.createElement(React.Fragment, null);

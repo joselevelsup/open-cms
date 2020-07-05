@@ -25,4 +25,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var ReactDom = __importStar(require("react-dom"));
 var _1 = __importDefault(require("./"));
-ReactDom.render(React.createElement(_1.default, null), document.getElementById("root"));
+ReactDom.render(React.createElement(_1.default, { routes: [{ name: "home page", apiRoute: "/home" }] }), document.getElementById("root"));

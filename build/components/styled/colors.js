@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.headerColor = exports.pageColor = exports.warning = exports.success = exports.secondary = exports.danger = void 0;
+var danger = "#f6511dff";
+exports.danger = danger;
+var secondary = "#00a6edff";
+exports.secondary = secondary;
+var success = "#7fb800ff";
+exports.success = success;
+var warning = "#ffb400ff";
+exports.warning = warning;
+var pageColor = "#d4e4ff";
+exports.pageColor = pageColor;
+var headerColor = "white";
+exports.headerColor = headerColor;

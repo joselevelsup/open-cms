@@ -27,37 +27,25 @@ var hookrouter_1 = require("hookrouter");
 var styled_components_1 = require("styled-components");
 var cmspage_1 = __importDefault(require("./components/cmspage"));
 var userpage_1 = __importDefault(require("./components/userpage"));
+var gate_1 = __importDefault(require("./components/gate"));
 var util_1 = require("./util");
-function OpenCms(props) {
-    var routes = props.routes, theme = props.theme, logo = props.logo, apiAddress = props.apiAddress, components = props.components, userPage = props.userPage, userMap = props.userMap, userRoute = props.userRoute;
+function OpenCms(_a) {
+    var routes = _a.routes, _b = _a.theme, theme = _b === void 0 ? {} : _b, _c = _a.logo, logo = _c === void 0 ? null : _c, _d = _a.apiAddress, apiAddress = _d === void 0 ? "http://localhost:8080" : _d, _e = _a.components, components = _e === void 0 ? [] : _e, _f = _a.userPage, userPage = _f === void 0 ? true : _f, _g = _a.userMap, userMap = _g === void 0 ? [] : _g, _h = _a.userRoute, userRoute = _h === void 0 ? "/users" : _h, _j = _a.locked, locked = _j === void 0 ? true : _j, _k = _a.credentials, credentials = _k === void 0 ? { username: "admin", password: "password123" } : _k;
     var remappedRoutes = {};
     var _loop_1 = function (r) {
         remappedRoutes["/admin/" + util_1.slugify(routes[r].name)] = function () { return (React.createElement(styled_components_1.ThemeProvider, { theme: theme },
-            React.createElement(cmspage_1.default, { otherRoutes: routes, apiRoute: "" + apiAddress + routes[r].apiRoute, logo: logo, customComponents: components }))); };
+            React.createElement(gate_1.default, { creds: credentials, locked: locked, component: function () { return (React.createElement(cmspage_1.default, { otherRoutes: routes, apiRoute: "" + apiAddress + routes[r].apiRoute, logo: logo, customComponents: components })); } }))); };
     };
     for (var r in routes) {
         _loop_1(r);
     }
     if (userPage) {
         remappedRoutes["/admin/users"] = function () { return (React.createElement(styled_components_1.ThemeProvider, { theme: theme }, userMap && userMap.length >= 1 ?
-            React.createElement(userpage_1.default, { userRoute: userRoute, userConfig: userMap, apiAddress: apiAddress, otherRoutes: routes })
+            React.createElement(gate_1.default, { creds: credentials, locked: locked, component: function () { return (React.createElement(userpage_1.default, { userRoute: userRoute, userConfig: userMap, apiAddress: apiAddress, otherRoutes: routes })); } })
             :
-                React.createElement(userpage_1.default, { apiAddress: apiAddress, otherRoutes: routes }))); };
+                React.createElement(gate_1.default, { creds: credentials, locked: locked, component: function () { return (React.createElement(userpage_1.default, { apiAddress: apiAddress, otherRoutes: routes })); } }))); };
     }
     var router = hookrouter_1.useRoutes(remappedRoutes);
     return router;
 }
-OpenCms.defaultProps = {
-    apiAddress: "http://localhost:8080",
-    routes: [
-        {
-            name: "home page",
-            apiRoute: "/home",
-        }
-    ],
-    theme: {},
-    logo: null,
-    components: [],
-    userPage: true
-};
 exports.default = OpenCms;

@@ -25,7 +25,7 @@ interface MainAppProps {
 }
 
 function OpenCms({
-	routes = [{ name: "home page", apiRoute: "/home" }],
+	routes,
 	theme = {},
 	logo = null,
 	apiAddress = "http://localhost:8080",
