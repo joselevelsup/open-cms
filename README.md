@@ -156,6 +156,10 @@ This is needed to help generate a chart and pull in the data from your response 
 
 If you wanted to make sure no one has access to the CMS there is an option for that. 
 
+``` jsx
+  <OpenCms locked={true} credentials={{username: "administrator", password: "aSuperDuperPassword"}} />
+```
+
 | Prop        | Type    | Required           | Description                                        | Default                                              |
 |-------------|---------|--------------------|----------------------------------------------------|------------------------------------------------------|
 | locked      | boolean | :heavy_check_mark: | Tells the CMS that you want the pages to be locked | false                                                |
