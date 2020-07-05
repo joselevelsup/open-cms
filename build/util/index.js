@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.randomId = exports.removeLastItem = exports.containsAny = exports.slugify = exports.firstObjectKey = void 0;
 exports.firstObjectKey = function (obj) {
     return Object.keys(obj)[0];
 };
@@ -22,4 +23,13 @@ exports.removeLastItem = function (arr) {
         }
     }
     return newArr.join("-");
+};
+exports.randomId = function (length) {
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var randS = "";
+    while (length > 0) {
+        randS += chars.charAt(Math.floor(Math.random() * chars.length));
+        length--;
+    }
+    return randS;
 };

@@ -1,13 +1,13 @@
 import styled, { css } from "styled-components";
-
-const danger = "#f6511dff";
-const success = "#7fb800ff";
-const warning = "#ffb400ff";
+import { danger, success, warning } from "./colors";
 
 const Button = styled.button`
 	color: white;
 	padding: 10px 17px;
 	cursor: pointer;
+	&:focus {
+		outline: none;
+	}
 `;
 
 const DangerButton = styled(Button)`
@@ -20,8 +20,7 @@ const SuccessButton = styled(Button).attrs((props: { updateAlert: boolean }) => 
 }))`
 	border: solid 2px ${props => props.theme.success ? props.theme.success : success};
 	background-color: ${props => props.theme.success ? props.theme.success : success};
-	${
-		props => props.updateAlert && 
+	${props => props.updateAlert &&
 			css`
 				padding-top: 0;
 				padding-bottom: 0;
@@ -32,8 +31,7 @@ const SuccessButton = styled(Button).attrs((props: { updateAlert: boolean }) => 
 				p:last-child{
 					padding-left: 6px;
 				}
-			`
-	}
+			`}
 `;
 
 const WarningButton = styled(Button)`

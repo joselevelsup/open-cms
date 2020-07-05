@@ -1,5 +1,6 @@
 import * as React from "react";
 import { firstObjectKey, containsAny, removeLastItem } from "../util";
+import { CmsInputHeader, CmsInput, CmsTextarea } from "./styled/input";
 import { DangerButton, SuccessButton } from "./styled/button";
 
 interface ComponentProps {
@@ -15,7 +16,7 @@ interface ComponentHeaderProps {
 	name: string;
 	value: string;
 	onChange(e: React.ChangeEvent<HTMLInputElement>): void;
-	removeComponent(): void
+	removeComponent(): void;
 	type: string;
 	changeComponent?(e: React.ChangeEvent<HTMLSelectElement>): void;
 	changeAvailable?: boolean;
@@ -32,7 +33,7 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange
 
 	return (
 		<div className="component-header">
-			<input name={name} value={value} onChange={onChange} placeholder="Title?" className="component-title" type="text" />
+			<CmsInputHeader name={name} value={value} onChange={onChange} placeholder="Title?" type="text" />
 			{
 				!type.includes("nested") &&
 					<>
@@ -64,16 +65,17 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 	switch(typeOfInput){
 		case "short-text":
 			return (
-				<input 
+				<CmsInput
 					name={`${slugKey}-value`} 
-					type="text" value={slug[slugKey].value} 
+					type="text"
+					value={slug[slugKey].value}
 					onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
 					className="component-input"
 				/>
 			);
 		case "long-text":
 			return (
-				<textarea 
+				<CmsTextarea
 					name={`${slugKey}-value`} 
 					value={slug[slugKey].value} 
 					onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
@@ -89,7 +91,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 		case "link": 
 			return (
 				<div className="link-container">
-					<input 
+					<CmsInput
 						name={`${slugKey}-value`} 
 						type="text" 
 						value={slug[slugKey].value} 

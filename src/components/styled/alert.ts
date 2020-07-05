@@ -1,6 +1,5 @@
 import styled from "styled-components";
-
-const danger = "#f6511dff";
+import { danger, success } from "./colors";
 
 const Alert = styled.div`
 	display: flex;
@@ -15,6 +14,12 @@ const DangerAlert = styled(Alert)`
 	border: solid 1px ${props => props.theme.danger ? props.theme.danger : danger};
 `;
 
+const SuccessAlert = styled(Alert)`
+	background-color: ${props => props.theme.success ? props.theme.success : success};
+	border: solid 1px ${props => props.theme.success ? props.theme.success : success};
+`;
+
 export {
-	DangerAlert
-};
+	DangerAlert,
+	SuccessAlert
+}

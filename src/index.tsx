@@ -3,6 +3,7 @@ import { useRoutes } from "hookrouter";
 import { ThemeProvider } from "styled-components";
 import CmsPage from "./components/cmspage";
 import UserCms from "./components/userpage";
+import Gate from "./components/gate";
 import { slugify } from "./util";
 
 export type CmsRoute = {
@@ -16,26 +17,40 @@ interface MainAppProps {
 	theme?: any; //TODO: be specific on what the user can customize
 	logo?: any;
 	components?: { name: string, slug: string, component: React.ComponentType }[];
-	userPage: boolean;
+	userPage?: boolean;
 	userMap?: { name: string, key: string }[];
-	userRoute?: string
+	userRoute?: string;
+	locked?: boolean;
+	credentials?: { username: string, password: string };
 }
 
-function OpenCms(props: MainAppProps) {
-	const { routes, theme, logo, apiAddress, components, userPage, userMap, userRoute } = props;
-	
+function OpenCms({
+	routes,
+	theme = {},
+	logo = null,
+	apiAddress = "http://localhost:8080",
+	components = [],
+	userPage = true,
+	userMap = [],
+	userRoute = "/users",
+	locked = true,
+	credentials = { username: "admin", password: "password123" }
+}: MainAppProps) {
+
 	let remappedRoutes = {};
 
 	for(let r in routes){
 		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
-		<ThemeProvider theme={theme}>
-			<CmsPage 
-				otherRoutes={routes} 
-				apiRoute={`${apiAddress}${routes[r].apiRoute}`} 
-				logo={logo}
-				customComponents={components}
-			/>
-		</ThemeProvider>
+			<ThemeProvider theme={theme}>
+				<Gate creds={credentials} locked={locked} component={() => (
+					<CmsPage
+						otherRoutes={routes}
+						apiRoute={`${apiAddress}${routes[r].apiRoute}`}
+						logo={logo}
+						customComponents={components}
+					/>
+				)}/>
+			</ThemeProvider>
 		) 
 	}
 
@@ -44,9 +59,18 @@ function OpenCms(props: MainAppProps) {
 			<ThemeProvider theme={theme}>
 				{
 					userMap && userMap.length >= 1 ?
-						<UserCms userRoute={userRoute} userConfig={userMap} apiAddress={apiAddress} otherRoutes={routes} />		
-						:
+					<Gate creds={credentials} locked={locked} component={() => (
+						<UserCms
+							userRoute={userRoute}
+							userConfig={userMap}
+							apiAddress={apiAddress}
+							otherRoutes={routes}
+						/>
+					)} />
+					:
+					<Gate creds={credentials} locked={locked} component={() => (
 						<UserCms apiAddress={apiAddress} otherRoutes={routes} />
+					)} />
 				}
 			</ThemeProvider>
 		)
@@ -56,19 +80,5 @@ function OpenCms(props: MainAppProps) {
 
 	return router;
 }
-
-OpenCms.defaultProps = {
-	apiAddress: "http://localhost:8080",
-	routes: [
-		{
-			name: "home page",
-			apiRoute: "/home",
-		}
-	],
-	theme: {},
-	logo: null,
-	components: [],
-	userPage: true
-};
 
 export default OpenCms;
