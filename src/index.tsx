@@ -14,7 +14,7 @@ export type CmsRoute = {
 interface MainAppProps {
 	apiAddress?: string;
 	routes: [CmsRoute];
-	theme?: { secondary?: string, danger?: string, success?: string, warning?: string, pageColor?: string, headerColor?: string };
+	theme?: { secondary?: string, danger?: string, success?: string, warning?: string, pageColor?: string, headerColor?: string }; 
 	logo?: any;
 	components?: { name: string, slug: string, component: React.ComponentType }[];
 	userPage?: boolean;
