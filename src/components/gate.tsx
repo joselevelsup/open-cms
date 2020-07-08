@@ -35,7 +35,7 @@ const LoginPane = ({ onLogin }: LoginPaneProps) => {
 		<CmsForm>
 			<form onSubmit={handleSubmit}>
 				<div>
-					<CmsInput placeholder="Username" name="username" type="text" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+					<CmsInput placeholder="Username or email" name="username" type="text" value={values.username} onChange={handleChange} onBlur={handleBlur} />
 				</div>
 				<div>
 					<CmsInput placeholder="Password" name="password" type="password" value={values.password} onChange={handleChange} onBlur={handleBlur} />
