@@ -59,12 +59,12 @@ const theme = {
 
 | ThemeColor  | Default     |
 |-------------|-------------|
-| danger      | `#f6511dff` |
-| secondary   | `#00a6edff` |
-| success     | `#7fb800ff` |
-| warning     | `#ffb400ff` |
-| pageColor   | `#d4e4ff`   |
-| headerColor | `#000000`   |
+| danger      | `#f6511dff`	|
+| secondary   | `#00a6edff`	|
+| success     | `#7fb800ff`	|
+| warning     | `#ffb400ff`	|
+| pageColor   | `#d4e4ff`		|
+| headerColor | `#000000`		|
 
 
 Now this is going to keep updating and the CMS will be customizable to the toe! Stay tuned ;)
@@ -170,11 +170,11 @@ If you wanted to make sure no one has access to the CMS there is an option for t
   <OpenCms locked={true} credentials={{username: "administrator", password: "aSuperDuperPassword"}} />
 ```
 
-| Prop        | Type    | Required           | Description                                        | Default                                              |
-|-------------|---------|--------------------|----------------------------------------------------|------------------------------------------------------|
-| locked      | boolean | :heavy_check_mark: | Tells the CMS that you want the pages to be locked | false                                                |
-| credentials | object  |                    | You can put static username and password           | ```{ username: "admin", password: "password123" }``` |
-|             |         |                    |                                                    |                                                      |
+| Prop        | Type    | Description                                        | Default                                              |
+|-------------|---------|----------------------------------------------------|------------------------------------------------------|
+| locked      | boolean | Tells the CMS that you want the pages to be locked | false                                                |
+| credentials | object  | You can put static username and password           |	`{ username: "admin", password: "password123" } `		 |
+|             |         |                                                    |                                                      |
 
 A login pane is already provided (for you to develop your own, that is coming soon!)
 
@@ -185,20 +185,20 @@ Once you have successfully logged in, a `sessionId` and `sessionTime` is stored 
 
 Well follow the table :P
 
-| Todo                       | In Progress                                  | Done               |
-|----------------------------|----------------------------------------------|--------------------|
-| Theming                    | :heavy_check_mark: (but some currently work) |                    |
-| Basic Components           |                                              | :heavy_check_mark: |
-| Custom Components          |                                              | :heavy_check_mark: |
-| Nested Components          |                                              | :heavy_check_mark: |
-| Image Upload               | :heavy_check_mark:                           |                    |
-| Sending Data               |                                              | :heavy_check_mark: |
-| Mobile View                |                                              |                    |
-| Testing with Other Routers |                                              |                    |
-| General Testing            | :heavy_check_mark:                           |                    |
-| This Readme                | :heavy_check_mark:                           |                    |
-| User Admin Panel           |                                              | :heavy_check_mark: |
-| Lock Down Panel            |                                              | :heavy_check_mark: |
+| Todo                       | In Progress         | Done																					|
+|----------------------------|---------------------|----------------------------------------------|
+| Theming                    |										 | :heavy_check_mark: (still in progress)				|
+| Basic Components           |                     | :heavy_check_mark:														|
+| Custom Components          |                     | :heavy_check_mark:														|
+| Nested Components          |                     | :heavy_check_mark:														|
+| Image Upload               | :heavy_check_mark:  |																							|
+| Sending Data               |                     | :heavy_check_mark:														|
+| Mobile View                |                     |																							|
+| Testing with Other Routers |                     |																							|
+| General Testing            | :heavy_check_mark:  |																							|
+| This Readme                | :heavy_check_mark:  |																							|
+| User Admin Panel           |                     | :heavy_check_mark:														|
+| Lock Down Panel            |                     | :heavy_check_mark:														|
 
 
 
