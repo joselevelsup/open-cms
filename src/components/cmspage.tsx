@@ -186,7 +186,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})
 	}
 
-	setComponentAttr = (slug: string, attr: string = "value", parent?: boolean, childSlug?: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any): void => {
+	setComponentAttr = (slug: string, attr: string = "value", parent?: boolean, childSlug?: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | File | any): void => {
 		const val = e.target ? e.target : { value: e };
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];

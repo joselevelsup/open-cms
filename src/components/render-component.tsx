@@ -1,11 +1,12 @@
 import * as React from "react";
 import { firstObjectKey, containsAny, removeLastItem } from "../util";
-import { CmsInputHeader, CmsInput, CmsTextarea } from "./styled/input";
+import { CmsInputHeader, CmsInput, CmsTextarea, CmsFileUpload } from "./styled/input";
 import { DangerButton, SuccessButton } from "./styled/button";
+import { useDropzone } from "react-dropzone";
 
 interface ComponentProps {
 	slug: any;
-	changeComponentAttr(slug: string, attr: string, parent?: boolean, childSlug?: string): (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+	changeComponentAttr(slug: string, attr: string, parent?: boolean, childSlug?: string): (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | File | any) => void;
 	deleteComponent(slug: string, parent?: boolean, childSlug?: string): void;
 	addNestedComponent(slugKey: string): void;
 	changeNestedComponent(e: React.ChangeEvent<HTMLSelectElement>, slugKey: string, oldComponent: string): void;
@@ -76,16 +77,29 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 		case "long-text":
 			return (
 				<CmsTextarea
-					name={`${slugKey}-value`} 
+					name={`${slugKey}-value`}
 					value={slug[slugKey].value} 
 					onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
 					className="component-input textarea" 
 				/>
 			);
 
-		case "media": 
+		case "media":
+			const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 			return (
 				<div className="media-container">
+					{
+						acceptedFiles && acceptedFiles.length >= 1 &&
+							<div className="uploader">
+								<img src={URL.createObjectURL(acceptedFiles[0])} />
+								<br />
+								<SuccessButton onClick={() => onCompTextChange(slugKey, "value")(acceptedFiles[0])}>Upload</SuccessButton>
+							</div>
+					}
+					<CmsFileUpload {...getRootProps({ noDrag: true })}>
+						<input {...getInputProps({ multiple: false })} />
+						<div>Click here to choose a picture</div>
+					</CmsFileUpload>
 				</div>
 			);
 		case "link": 
