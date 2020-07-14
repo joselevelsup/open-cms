@@ -3,26 +3,7 @@ import { firstObjectKey, containsAny, removeLastItem } from "../util";
 import { CmsInputHeader, CmsInput, CmsTextarea, CmsFileUpload } from "./styled/input";
 import { DangerButton, SuccessButton } from "./styled/button";
 import { useDropzone } from "react-dropzone";
-
-interface ComponentProps {
-	slug: any;
-	changeComponentAttr(slug: string, attr: string, parent?: boolean, childSlug?: string): (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | File | any) => void;
-	deleteComponent(slug: string, parent?: boolean, childSlug?: string): void;
-	addNestedComponent(slugKey: string): void;
-	changeNestedComponent(e: React.ChangeEvent<HTMLSelectElement>, slugKey: string, oldComponent: string): void;
-	componentList: { name: string, slug: string, component?: React.ComponentType}[]
-}
-
-interface ComponentHeaderProps {
-	name: string;
-	value: string;
-	onChange(e: React.ChangeEvent<HTMLInputElement>): void;
-	removeComponent(): void;
-	type: string;
-	changeComponent?(e: React.ChangeEvent<HTMLSelectElement>): void;
-	changeAvailable?: boolean;
-	componentlist?: { name: string, slug: string, component?: React.ComponentType }[]
-}
+import { ComponentProps, ComponentHeaderProps, NewComponent } from "../types";
 
 const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange, removeComponent, type, changeComponent, changeAvailable, componentlist }) => {
 	const [ newComponentType, setNewComponentType ] = React.useState<string>("short-text");
@@ -120,7 +101,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 	}
 }
 
-const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[], child?: boolean, parentSlugKey?: string) => {
+const renderCustomComponent = (_slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: NewComponent[], child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
 	const typeOfInput: string = removeLastItem(splitKey);
 	const CustomComponent: any = componentList.find(c => c.slug == typeOfInput).component;
