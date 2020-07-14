@@ -250,13 +250,11 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			return componentData;
 		});
 
-		console.log(data);
-
-		/* axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => { */
-		/* 	console.log(resp); */
-		/* }).catch((err: AxiosError) => { */
-		/* 	console.log(err); */
-		/* }) */	
+		axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => {
+			console.log(resp);
+		}).catch((err: AxiosError) => {
+			console.log(err);
+		})	
 	}
 
 	createNestedComponent = (nestedSlug: string): void => {

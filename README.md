@@ -64,7 +64,7 @@ const theme = {
 | success     | `#7fb800ff`	|
 | warning     | `#ffb400ff`	|
 | pageColor   | `#d4e4ff`		|
-| headerColor | `#000000`		|
+| headerColor | `#ffffff`		|
 
 
 Now this is going to keep updating and the CMS will be customizable to the toe! Stay tuned ;)

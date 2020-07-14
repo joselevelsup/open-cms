@@ -14,9 +14,9 @@ export interface NewComponent {
 export interface MainAppProps {
 	apiAddress?: string;
 	routes: [CmsRoute];
-	theme?: any; //TODO: be specific on what the user can customize
+	theme?: { secondary?: string, danger?: string, success?: string, warning?: string, pageColor?: string, headerColor?: string };
 	logo?: any;
-	components?: NewComponent[];
+	components?: NewComponent[] | [];
 	userPage?: boolean;
 	userMap?: { name: string, key: string }[];
 	userRoute?: string;
@@ -55,7 +55,7 @@ export interface ApiComponentDataWithNested extends ApiComponentData {
 export interface CmsPageProps {
 	otherRoutes: [CmsRoute];
 	apiRoute: string;
-	customComponents?: NewComponent;
+	customComponents?: NewComponent[];
 	logo?: any;
 }
 
