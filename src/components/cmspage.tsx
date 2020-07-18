@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CmsRoute } from "../";
 import { firstObjectKey, slugify } from "../util";
 import RenderComponent from "./render-component";
 import axios, { AxiosResponse, AxiosError } from "axios";
@@ -8,49 +7,13 @@ import { SuccessButton, DangerButton, WarningButton } from "./styled/button";
 import { DangerAlert } from "./styled/alert";
 import { Cms, CmsHeader, CmsBody } from "./styled/cms";
 import "../styles/index.scss";
-
-interface BasicCmsComponentEntry {
-  title: string,
-  value: string
-}
-
-interface NestedCmsComponentEntry {
-  components: [{
-		[key: string]: BasicCmsComponentEntry
-  }]
-}
-
-interface CmsComponent {
-  [key: string]: BasicCmsComponentEntry | NestedCmsComponentEntry
-}
-
-interface ApiComponentData {
-	id: number;
-	title: string;
-	value?: string;
-	type: string;
-	slug: string;
-}
-
-interface ApiComponentDataWithNested extends ApiComponentData {
-	components?: [ApiComponentData]
-}
-
-interface CmsPageProps {
-	otherRoutes: [CmsRoute];
-	apiRoute: string;
-	customComponents?: { name: string, component: React.ComponentType }[];
-	logo?: any;
-}
-
-interface CmsPageState {
-	componentsForThisPage: CmsComponent[];
-	needsUpdateAlert: boolean;
-	componentList: { name: string, slug: string, component?: React.ComponentType }[]
-	loadError: boolean;
-	loadErrorMessage?: string | null;
-}
-
+import { 
+	CmsPageProps, 
+	CmsPageState, 
+	CmsComponent, 
+	ApiComponentData,
+	ApiComponentDataWithNested 
+} from "../types";
 
 export default class CmsPage extends React.Component<CmsPageProps, CmsPageState> {
 
@@ -186,7 +149,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		})
 	}
 
-	setComponentAttr = (slug: string, attr: string = "value", parent?: boolean, childSlug?: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any): void => {
+	setComponentAttr = (slug: string, attr: string = "value", parent?: boolean, childSlug?: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | File | any): void => {
 		const val = e.target ? e.target : { value: e };
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
@@ -287,13 +250,11 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			return componentData;
 		});
 
-		console.log(data);
-
-		/* axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => { */
-		/* 	console.log(resp); */
-		/* }).catch((err: AxiosError) => { */
-		/* 	console.log(err); */
-		/* }) */	
+		axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => {
+			console.log(resp);
+		}).catch((err: AxiosError) => {
+			console.log(err);
+		})	
 	}
 
 	createNestedComponent = (nestedSlug: string): void => {

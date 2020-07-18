@@ -132,6 +132,15 @@ body {
 							margin: auto;
 						}
 					}
+
+					.media-container {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						& > img {
+							max-width: 300px;
+						}
+					}
 				}
 
 				.link-container {

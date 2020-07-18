@@ -23,8 +23,19 @@ const CmsTextarea = styled.textarea`
 	outline: none;
 `;
 
+const CmsFileUpload = styled.div`
+	border: solid 1px ${props => props.theme.secondary ? props.theme.secondary : secondary};
+	background-color: ${props => props.theme.secondary ? props.theme.secondary : secondary};
+	border-radius: 3px;
+	width: 30%;
+	& > div {
+		color: #ffffff;
+	}
+`
+
 export {
 	CmsInput,
 	CmsTextarea,
-	CmsInputHeader
+	CmsInputHeader,
+	CmsFileUpload
 };
