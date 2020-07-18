@@ -1,27 +1,9 @@
 import * as React from "react";
 import { firstObjectKey, containsAny, removeLastItem } from "../util";
-import { CmsInputHeader, CmsInput, CmsTextarea } from "./styled/input";
+import { CmsInputHeader, CmsInput, CmsTextarea, CmsFileUpload } from "./styled/input";
 import { DangerButton, SuccessButton } from "./styled/button";
-
-interface ComponentProps {
-	slug: any;
-	changeComponentAttr(slug: string, attr: string, parent?: boolean, childSlug?: string): (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-	deleteComponent(slug: string, parent?: boolean, childSlug?: string): void;
-	addNestedComponent(slugKey: string): void;
-	changeNestedComponent(e: React.ChangeEvent<HTMLSelectElement>, slugKey: string, oldComponent: string): void;
-	componentList: { name: string, slug: string, component?: React.ComponentType}[]
-}
-
-interface ComponentHeaderProps {
-	name: string;
-	value: string;
-	onChange(e: React.ChangeEvent<HTMLInputElement>): void;
-	removeComponent(): void;
-	type: string;
-	changeComponent?(e: React.ChangeEvent<HTMLSelectElement>): void;
-	changeAvailable?: boolean;
-	componentlist?: { name: string, slug: string, component?: React.ComponentType }[]
-}
+import { useDropzone } from "react-dropzone";
+import { ComponentProps, ComponentHeaderProps, NewComponent } from "../types";
 
 const ComponentHeader: React.FC<ComponentHeaderProps> = ({ name, value, onChange, removeComponent, type, changeComponent, changeAvailable, componentlist }) => {
 	const [ newComponentType, setNewComponentType ] = React.useState<string>("short-text");
@@ -76,16 +58,29 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 		case "long-text":
 			return (
 				<CmsTextarea
-					name={`${slugKey}-value`} 
+					name={`${slugKey}-value`}
 					value={slug[slugKey].value} 
 					onChange={!child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey)} 
 					className="component-input textarea" 
 				/>
 			);
 
-		case "media": 
+		case "media":
+			const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 			return (
 				<div className="media-container">
+					{
+						acceptedFiles && acceptedFiles.length >= 1 &&
+							<div className="uploader">
+								<img src={URL.createObjectURL(acceptedFiles[0])} />
+								<br />
+								<SuccessButton onClick={() => onCompTextChange(slugKey, "value")(acceptedFiles[0])}>Upload</SuccessButton>
+							</div>
+					}
+					<CmsFileUpload {...getRootProps({ noDrag: true })}>
+						<input {...getInputProps({ multiple: false })} />
+						<div>Click here to choose a picture</div>
+					</CmsFileUpload>
 				</div>
 			);
 		case "link": 
@@ -106,7 +101,7 @@ const renderActualComponent = (slug: ComponentProps["slug"], onCompTextChange: C
 	}
 }
 
-const renderCustomComponent = (slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: {name: string, slug: string, component?: React.ComponentType}[], child?: boolean, parentSlugKey?: string) => {
+const renderCustomComponent = (_slug: ComponentProps["slug"], onCompTextChange: ComponentProps["changeComponentAttr"], slugKey: string, componentList: NewComponent[], child?: boolean, parentSlugKey?: string) => {
 	const splitKey: string[] = slugKey.split("-"); 
 	const typeOfInput: string = removeLastItem(splitKey);
 	const CustomComponent: any = componentList.find(c => c.slug == typeOfInput).component;

@@ -5,24 +5,7 @@ import CmsPage from "./components/cmspage";
 import UserCms from "./components/userpage";
 import Gate from "./components/gate";
 import { slugify } from "./util";
-
-export type CmsRoute = {
-	name: string,
-	apiRoute: string,
-}
-
-interface MainAppProps {
-	apiAddress?: string;
-	routes: [CmsRoute];
-	theme?: { secondary?: string, danger?: string, success?: string, warning?: string, pageColor?: string, headerColor?: string }; 
-	logo?: any;
-	components?: { name: string, slug: string, component: React.ComponentType }[];
-	userPage?: boolean;
-	userMap?: { name: string, key: string }[];
-	userRoute?: string;
-	locked?: boolean;
-	credentials?: { username: string, password: string };
-}
+import { MainAppProps } from "./types";
 
 function OpenCms({
 	routes,
