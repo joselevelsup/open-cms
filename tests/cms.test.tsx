@@ -1,6 +1,7 @@
 import * as React from "react";
 import { mount, shallow } from "enzyme";
 import CmsPage from "../src/components/cmspage";
+import { NewComponent  } from "../src/types";
 
 describe("CmsPage", () => {
 	it("should render with only required props", () => {
@@ -41,14 +42,22 @@ describe("CmsPage", () => {
 		expect(ComponentState.length).toEqual(0);
 	});
 
-	it("should add a component data to componentsForThisPage state", () => {
-		
+	it("should add a custom component to componentList state", () => {
+		const customComponents: NewComponent[] = [
+			{
+				name: "myComponent",
+				slug: "my-component",
+				component: ({ onComponentChange, name }) => <input name={name} onChange={(e) => onComponentChange(e)} />
+			}
+		];
+
+		const wrapper = mount(
+			<CmsPage customComponents={customComponents} otherRoutes={[{ name: "home page", apiRoute: "/home"}]} apiRoute={"http://localhost:8080/home"} />
+		);
+
+		const componentList: NewComponent[] = wrapper.state("componentList");
+
+		expect(componentList.length).toEqual(6);
 	})
 
-	/* it("should display available components with a custom component", () => { */
-	/* 	const wrapper = shallow( */
-	/* 		<CmsPage otherRoutes={[{ name: "home page", apiRoute: "/home"}]} apiRoute={"http://localhost:8080/home"} /> */
-	/* 	); */
-
-	/* }) */
 });

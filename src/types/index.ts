@@ -5,10 +5,17 @@ export type CmsRoute = {
 	apiRoute: string,
 }
 
+type CustomComponentFuncArgs = {
+	onComponentChange(e: any): void,
+	name: string
+}
+
+type CustomComponentFunc = ({ onComponentChange, name }: CustomComponentFuncArgs) => React.ComponentType | JSX.Element;
+
 export interface NewComponent {
 	name: string;
 	slug?: string;
-	component?: React.ComponentType;
+	component?: CustomComponentFunc
 }
 
 export interface MainAppProps {
