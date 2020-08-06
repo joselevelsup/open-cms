@@ -11,5 +11,5 @@ var warning = "#ffb400ff";
 exports.warning = warning;
 var pageColor = "#d4e4ff";
 exports.pageColor = pageColor;
-var headerColor = "white";
+var headerColor = "#ffffff";
 exports.headerColor = headerColor;

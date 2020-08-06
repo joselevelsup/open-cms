@@ -5,10 +5,17 @@ export type CmsRoute = {
 	apiRoute: string,
 }
 
+type CustomComponentFuncArgs = {
+	onComponentChange(e: any): void,
+	name: string
+}
+
+type CustomComponentFunc = ({ onComponentChange, name }: CustomComponentFuncArgs) => React.ComponentType | JSX.Element;
+
 export interface NewComponent {
 	name: string;
 	slug?: string;
-	component?: React.ComponentType;
+	component?: CustomComponentFunc
 }
 
 export interface MainAppProps {
@@ -87,3 +94,23 @@ export interface ComponentHeaderProps {
 	componentlist?: NewComponent[];
 }
 
+export interface UserInfo {
+	id: string | number;
+	[key: string]: any
+}
+
+export interface UserCmsProps {
+	apiAddress: string;
+	userRoute?: string;
+	otherRoutes: [CmsRoute];
+	logo?: any;
+	userConfig?: { name: string, key: string }[];
+}
+
+export interface UserCmsState {
+	deleteModal: boolean;
+	editModal: boolean;
+	users: UserInfo[];
+	errorMessage: string | null;
+	successMessage: string | null;
+}

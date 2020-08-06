@@ -1,31 +1,10 @@
 import * as React from "react";
 import axios, { AxiosResponse, AxiosError } from "axios"
-import { CmsRoute } from "../";
 import { Cms, CmsHeader, CmsBody } from "./styled/cms";
 import { DangerAlert } from "./styled/alert";
 import { DangerButton, SuccessButton } from "./styled/button";
 import { slugify } from "../util";
-
-interface UserInfo {
-	id: string | number;
-	[key: string]: any
-}
-
-interface UserCmsProps {
-	apiAddress: string;
-	userRoute?: string;
-	otherRoutes: [CmsRoute];
-	logo?: any;
-	userConfig?: { name: string, key: string }[];
-}
-
-interface UserCmsState {
-	deleteModal: boolean;
-	editModal: boolean;
-	users: UserInfo[];
-	errorMessage: string | null;
-	successMessage: string | null;
-}
+import { UserInfo, UserCmsProps, UserCmsState } from "../types";
 
 export default class UserCms extends React.Component<UserCmsProps, UserCmsState> {
 
