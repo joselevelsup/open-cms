@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
-  "scripts": {
+	"types": "build/index.d.ts",
+	"scripts": {
     "test": "jest",
     "build": "tsc --project tsconfig.json",
     "postbuild": "copyfiles --flat ./src/styles/index.scss ./build/styles",

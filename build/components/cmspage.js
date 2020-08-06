@@ -38,7 +38,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -294,12 +294,11 @@ var CmsPage = /** @class */ (function (_super) {
                 }
                 return componentData;
             });
-            console.log(data);
-            /* axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => { */
-            /* 	console.log(resp); */
-            /* }).catch((err: AxiosError) => { */
-            /* 	console.log(err); */
-            /* }) */
+            axios_1.default.put(_this.props.apiRoute, data).then(function (resp) {
+                console.log(resp);
+            }).catch(function (err) {
+                console.log(err);
+            });
         };
         _this.createNestedComponent = function (nestedSlug) {
             _this.setState(function (state) {

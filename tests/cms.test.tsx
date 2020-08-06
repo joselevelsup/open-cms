@@ -58,6 +58,6 @@ describe("CmsPage", () => {
 		const componentList: NewComponent[] = wrapper.state("componentList");
 
 		expect(componentList.length).toEqual(6);
-	})
+	});
 
 });

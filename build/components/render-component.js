@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -14,7 +25,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -23,6 +34,7 @@ var React = __importStar(require("react"));
 var util_1 = require("../util");
 var input_1 = require("./styled/input");
 var button_1 = require("./styled/button");
+var react_dropzone_1 = require("react-dropzone");
 var ComponentHeader = function (_a) {
     var name = _a.name, value = _a.value, onChange = _a.onChange, removeComponent = _a.removeComponent, type = _a.type, changeComponent = _a.changeComponent, changeAvailable = _a.changeAvailable, componentlist = _a.componentlist;
     var _b = React.useState("short-text"), newComponentType = _b[0], setNewComponentType = _b[1];
@@ -47,7 +59,16 @@ var renderActualComponent = function (slug, onCompTextChange, slugKey, child, pa
         case "long-text":
             return (React.createElement(input_1.CmsTextarea, { name: slugKey + "-value", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input textarea" }));
         case "media":
-            return (React.createElement("div", { className: "media-container" }));
+            var _a = react_dropzone_1.useDropzone(), acceptedFiles_1 = _a.acceptedFiles, getRootProps = _a.getRootProps, getInputProps = _a.getInputProps;
+            return (React.createElement("div", { className: "media-container" },
+                acceptedFiles_1 && acceptedFiles_1.length >= 1 &&
+                    React.createElement("div", { className: "uploader" },
+                        React.createElement("img", { src: URL.createObjectURL(acceptedFiles_1[0]) }),
+                        React.createElement("br", null),
+                        React.createElement(button_1.SuccessButton, { onClick: function () { return onCompTextChange(slugKey, "value")(acceptedFiles_1[0]); } }, "Upload")),
+                React.createElement(input_1.CmsFileUpload, __assign({}, getRootProps({ noDrag: true })),
+                    React.createElement("input", __assign({}, getInputProps({ multiple: false }))),
+                    React.createElement("div", null, "Click here to choose a picture"))));
         case "link":
             return (React.createElement("div", { className: "link-container" },
                 React.createElement(input_1.CmsInput, { name: slugKey + "-value", type: "text", value: slug[slugKey].value, onChange: !child ? onCompTextChange(slugKey, "value") : onCompTextChange(parentSlugKey, "value", true, slugKey), className: "component-input link" }),
@@ -56,7 +77,7 @@ var renderActualComponent = function (slug, onCompTextChange, slugKey, child, pa
             return React.createElement(React.Fragment, null);
     }
 };
-var renderCustomComponent = function (slug, onCompTextChange, slugKey, componentList, child, parentSlugKey) {
+var renderCustomComponent = function (_slug, onCompTextChange, slugKey, componentList, child, parentSlugKey) {
     var splitKey = slugKey.split("-");
     var typeOfInput = util_1.removeLastItem(splitKey);
     var CustomComponent = componentList.find(function (c) { return c.slug == typeOfInput; }).component;
