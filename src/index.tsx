@@ -3,9 +3,9 @@ import { useRoutes } from "hookrouter";
 import { ThemeProvider } from "styled-components";
 import CmsPage from "./components/cmspage";
 import UserCms from "./components/userpage";
-import Gate from "./components/gate";
 import { slugify } from "./util";
 import { MainAppProps } from "./types";
+import SimpleGate from "react-gate-duo";
 
 function OpenCms({
 	routes,
@@ -17,7 +17,7 @@ function OpenCms({
 	userMap = [],
 	userRoute = "/users",
 	locked = true,
-	credentials = { username: "admin", password: "password123" }
+	gateProps = { localCredentials: { username: "admin", password: "password" } }
 }: MainAppProps) {
 
 	let remappedRoutes = {};
@@ -25,14 +25,24 @@ function OpenCms({
 	for(let r in routes){
 		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
 			<ThemeProvider theme={theme}>
-				<Gate creds={credentials} locked={locked} component={() => (
+				{
+					locked ?
+					<SimpleGate {...gateProps}>
+						<CmsPage
+							otherRoutes={routes}
+							apiRoute={`${apiAddress}${routes[r].apiRoute}`}
+							logo={logo}
+							customComponents={components}
+						/>
+					</SimpleGate>
+					:
 					<CmsPage
 						otherRoutes={routes}
 						apiRoute={`${apiAddress}${routes[r].apiRoute}`}
 						logo={logo}
 						customComponents={components}
 					/>
-				)}/>
+				}
 			</ThemeProvider>
 		) 
 	}
@@ -42,18 +52,37 @@ function OpenCms({
 			<ThemeProvider theme={theme}>
 				{
 					userMap && userMap.length >= 1 ?
-					<Gate creds={credentials} locked={locked} component={() => (
-						<UserCms
-							userRoute={userRoute}
-							userConfig={userMap}
-							apiAddress={apiAddress}
-							otherRoutes={routes}
-						/>
-					)} />
+					<>
+						{
+							locked ?
+							<SimpleGate {...gateProps}>
+								<UserCms
+									userRoute={userRoute}
+									userConfig={userMap}
+									apiAddress={apiAddress}
+									otherRoutes={routes}
+								/>
+							</SimpleGate>
+							:
+							<UserCms
+								userRoute={userRoute}
+								userConfig={userMap}
+								apiAddress={apiAddress}
+								otherRoutes={routes}
+							/>
+						}
+					</>
 					:
-					<Gate creds={credentials} locked={locked} component={() => (
-						<UserCms apiAddress={apiAddress} otherRoutes={routes} />
-					)} />
+					<>
+						{
+							locked ?
+							<SimpleGate {...gateProps}>
+								<UserCms apiAddress={apiAddress} otherRoutes={routes} />
+							</SimpleGate> 
+							:
+							<UserCms apiAddress={apiAddress} otherRoutes={routes} />
+						}
+					</>
 				}
 			</ThemeProvider>
 		)
