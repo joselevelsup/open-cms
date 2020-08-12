@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
-	"types": "build/index.d.ts",
-	"scripts": {
+  "types": "build/index.d.ts",
+  "scripts": {
     "test": "jest",
     "build": "tsc --project tsconfig.json",
     "postbuild": "copyfiles --flat ./src/styles/index.scss ./build/styles",
@@ -49,6 +49,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.1",
+    "react-gate-duo": "github:joselevelsup/react-gate-duo#master",
     "react-icons": "^3.10.0",
     "sass": "^1.26.5",
     "styled-components": "^5.1.1",
@@ -69,14 +70,15 @@
       "raf/polyfill"
     ],
     "testRegex": "/tests/.*\\.(tsx)$",
-		"setupFilesAfterEnv": [
-			"<rootDir>/tests/setupTests.ts"
-		],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setupTests.ts"
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     }
-  }
+  },
+  "dependencies": {}
 }

@@ -28,7 +28,11 @@ export interface MainAppProps {
 	userMap?: { name: string, key: string }[];
 	userRoute?: string;
 	locked?: boolean;
-	credentials?: { username: string, password: string };
+	gateProps?: {
+		localCredentials?: { username: string, password: string },
+		authorized?: boolean,
+		inputClassName?: string
+	}
 }
 
 interface BasicCmsComponentEntry {
