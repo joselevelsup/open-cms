@@ -44,6 +44,7 @@
     "hookrouter": "^1.2.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.1.0",
+    "miragejs": "^0.1.40",
     "parcel": "^1.12.4",
     "raf": "^3.4.1",
     "react": "^16.13.1",
