@@ -52,35 +52,40 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		customComponents: []
 	}
 
+	setComponentData = (data: ApiComponentDataWithNested[]) => {
+		let remappedData = data.map(t => {
+			let remappedComponent = {};
+			if(t.type == "nested"){
+				let remappedNestedComponents = t.components.map(tc => ({
+					[`${tc.type}-${tc.id}`]: {
+						"title": tc.title,
+						"value": tc.value
+					}
+				}));
+				remappedComponent[`${t.type}-${t.id}`] = {
+					"title": t.title,
+					"components": remappedNestedComponents
+				}
+			} else {
+				remappedComponent[`${t.type}-${t.id}`] = {
+					"title": t.title,
+					"value": t.value
+				}
+			}
+
+			return remappedComponent;
+		});
+
+		return remappedData;
+	}
+
 	loadComponentData = async () => {
 		const { apiRoute } = this.props;
 		const self = this;
 
 		axios.get(apiRoute).then((resp: AxiosResponse) => {
 			const { data } = resp;
-			let remappedData = data.map(t => {
-				let remappedComponent = {};
-				if(t.type == "nested"){
-					let remappedNestedComponents = t.components.map(tc => ({
-						[`${tc.type}-${tc.id}`]: {
-							"title": tc.title,
-							"value": tc.value
-						}
-					}));
-					remappedComponent[`${t.type}-${t.id}`] = {
-						"title": t.title,
-						"components": remappedNestedComponents
-					}
-				} else {
-					remappedComponent[`${t.type}-${t.id}`] = {
-						"title": t.title,
-						"value": t.value
-					}
-				}
-
-				return remappedComponent;
-			});
-
+			const remappedData = this.setComponentData(data);
 			self.setState({
 				componentsForThisPage: remappedData
 			});
@@ -109,15 +114,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		this.loadComponentData();
 	}
 
-	componentDidUpdate(_prevProps: CmsPageProps, prevState: CmsPageState){
-		const { componentsForThisPage } = this.state;
-		if(prevState.componentsForThisPage !== componentsForThisPage){
-			this.setState({
-				needsUpdateAlert: true
-			});
-		}
-	}
-
 	addComponentToList = (slug: string): void => {
 		this.setState(state => {
 			const currentComponents = [...state.componentsForThisPage];
@@ -144,7 +140,8 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 			}
 
 			return {
-				componentsForThisPage: currentComponents
+				componentsForThisPage: currentComponents,
+				needsUpdateAlert: true
 			};
 		})
 	}
@@ -217,7 +214,6 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 				let components: [ApiComponentData] = c[key]["components"].map((nc: CmsComponent) => {
 					let nestedKey = firstObjectKey(nc);
 					let nestedSpl: string[] = nestedKey.split("-");
-					console.log(nestedSpl);
 					let nestedId: number = nestedSpl.length == 3 ? parseInt(nestedSpl[2]) : parseInt(nestedSpl[1]);
 					const nestedTypeOfComponent: string = nestedSpl.length == 3 ? `${nestedSpl[0]}-${nestedSpl[1]}` : nestedSpl[0];
 					return {
@@ -251,7 +247,11 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		});
 
 		axios.put(this.props.apiRoute, data).then((resp: AxiosResponse) => {
-			console.log(resp);
+			if(resp.status == 200){
+				this.setState(state => ({
+					needsUpdateAlert: !state.needsUpdateAlert
+				}));
+			}
 		}).catch((err: AxiosError) => {
 			console.log(err);
 		})	

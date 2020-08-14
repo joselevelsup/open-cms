@@ -11,7 +11,7 @@ function OpenCms({
 	routes,
 	theme = {},
 	logo = null,
-	apiAddress = "http://localhost:8080",
+	apiAddress = "",
 	components = [],
 	userPage = true,
 	userMap = [],
