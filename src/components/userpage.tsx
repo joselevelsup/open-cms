@@ -17,7 +17,6 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	};
 
 	static defaultProps = {
-		userRoute: "/users",
 		userConfig: [
 			{
 				name: "First Name",
@@ -35,9 +34,9 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	}
 
 	retreiveUsers = () => {
-		const { apiAddress, userRoute } = this.props;
+		const { apiRoute } = this.props;
 		const self = this;
-		axios.get(`${apiAddress}${userRoute}`).then((resp: AxiosResponse) => {
+		axios.get(apiRoute).then((resp: AxiosResponse) => {
 			const { data } = resp;
 
 			if(data.users && data.users.length >= 1){
@@ -47,7 +46,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 			}
 		}).catch((err: AxiosError) => {
 			self.setState({
-				errorMessage: `Error loading Users from ${apiAddress}${userRoute} (${err.message})`
+				errorMessage: `Error loading Users from ${apiRoute} (${err.message})`
 			});
 		})
 	}
@@ -61,11 +60,11 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	}));
 
 	deleteUser = (id: string | number) => {
-		const { apiAddress, userRoute } = this.props;
+		const { apiRoute } = this.props;
 		const self = this;
 		let confirmDeleteUser = confirm("Are you sure you want to delete this user?");
 		if(confirmDeleteUser){
-			axios.delete(`${apiAddress}${userRoute}`, {
+			axios.delete(apiRoute, {
 				data: {
 					userId: id
 				}
@@ -78,14 +77,14 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 				}
 			}).catch((err: AxiosError) => {
 				self.setState({
-					errorMessage: `Error loading Users from ${apiAddress}${userRoute} (${err.message})`
+					errorMessage: `Error loading Users from ${apiRoute} (${err.message})`
 				});
 			})
 		}
 	}
 
 	sendResetPassword = (id: string | number) => {
-		const { apiAddress, userRoute } = this.props;
+		const { apiRoute } = this.props;
 		const self = this;
 
 		let confirmResetUserPass = confirm("Reset this User's password?");
@@ -94,7 +93,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 			let resetPasswordPrompt = prompt("Enter new password (Leave empty if sending instructions)", "");
 			if(resetPasswordPrompt !== null){
 				if(resetPasswordPrompt.length >= 1){
-					axios.put(`${apiAddress}${userRoute}`, {
+					axios.put(apiRoute, {
 						data: {
 							userId: id,
 							newPassword: resetPasswordPrompt
@@ -110,7 +109,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 					});
 				}
 				if(resetPasswordPrompt.length < 1){
-					axios.put(`${apiAddress}${userRoute}`, {
+					axios.put(apiRoute, {
 						data: {
 							userId: id
 						}

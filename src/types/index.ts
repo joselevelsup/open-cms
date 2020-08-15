@@ -1,4 +1,5 @@
 import * as React from "react";
+import { GateProps } from "react-gate-duo/build/types";
 
 export type CmsRoute = {
 	name: string,
@@ -24,15 +25,15 @@ export interface MainAppProps {
 	theme?: { secondary?: string, danger?: string, success?: string, warning?: string, pageColor?: string, headerColor?: string };
 	logo?: any;
 	components?: NewComponent[] | [];
-	userPage?: boolean;
-	userMap?: { name: string, key: string }[];
-	userRoute?: string;
+	userCmsProps?: {
+		userRoute: string,
+		userConfig: { 
+			name: string,
+			key: string
+		}[]
+	},
 	locked?: boolean;
-	gateProps?: {
-		localCredentials?: { username: string, password: string },
-		authorized?: boolean,
-		inputClassName?: string
-	}
+	gateProps?: GateProps
 }
 
 interface BasicCmsComponentEntry {
@@ -63,21 +64,6 @@ export interface ApiComponentDataWithNested extends ApiComponentData {
 }
 
 
-export interface CmsPageProps {
-	otherRoutes: [CmsRoute];
-	apiRoute: string;
-	customComponents?: NewComponent[];
-	logo?: any;
-}
-
-export interface CmsPageState {
-	componentsForThisPage: CmsComponent[];
-	needsUpdateAlert: boolean;
-	componentList: NewComponent[];
-	loadError: boolean;
-	loadErrorMessage?: string | null;
-}
-
 export interface ComponentProps {
 	slug: any;
 	changeComponentAttr(slug: string, attr: string, parent?: boolean, childSlug?: string): (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | File | any) => void;
@@ -103,11 +89,28 @@ export interface UserInfo {
 	[key: string]: any
 }
 
-export interface UserCmsProps {
-	apiAddress: string;
-	userRoute?: string;
-	otherRoutes: [CmsRoute];
+// Page Types
+
+type BasePageProps = {
+	apiRoute?: string;
 	logo?: any;
+}
+
+export interface CmsPageProps extends BasePageProps {
+	otherRoutes: [CmsRoute];
+	customComponents?: NewComponent[];
+}
+
+export interface CmsPageState {
+	componentsForThisPage: CmsComponent[];
+	needsUpdateAlert: boolean;
+	componentList: NewComponent[];
+	loadError: boolean;
+	loadErrorMessage?: string | null;
+}
+
+export interface UserCmsProps extends BasePageProps {
+	otherRoutes?: [CmsRoute];
 	userConfig?: { name: string, key: string }[];
 }
 

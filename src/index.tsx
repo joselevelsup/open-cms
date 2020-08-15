@@ -14,9 +14,8 @@ function OpenCms({
 	apiAddress = "",
 	components = [],
 	userPage = true,
-	userMap = [],
-	userRoute = "/users",
 	locked = true,
+	userCmsProps = { userConfig: [], userRoute: "/cms/users" },
 	gateProps = { localCredentials: { username: "admin", password: "password" } }
 }: MainAppProps) {
 
@@ -51,23 +50,21 @@ function OpenCms({
 		remappedRoutes["/admin/users"] = () => (
 			<ThemeProvider theme={theme}>
 				{
-					userMap && userMap.length >= 1 ?
+					userCmsProps && userCmsProps.userConfig.length >= 1 ?
 					<>
 						{
 							locked ?
 							<SimpleGate {...gateProps}>
 								<UserCms
-									userRoute={userRoute}
-									userConfig={userMap}
-									apiAddress={apiAddress}
+									apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
+									userConfig={userCmsProps.userConfig}
 									otherRoutes={routes}
 								/>
 							</SimpleGate>
 							:
 							<UserCms
-								userRoute={userRoute}
-								userConfig={userMap}
-								apiAddress={apiAddress}
+								apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
+								userConfig={userCmsProps.userConfig}
 								otherRoutes={routes}
 							/>
 						}
@@ -77,10 +74,18 @@ function OpenCms({
 						{
 							locked ?
 							<SimpleGate {...gateProps}>
-								<UserCms apiAddress={apiAddress} otherRoutes={routes} />
+								<UserCms 
+									apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
+									userConfig={userCmsProps.userConfig}
+									otherRoutes={routes}
+								/>
 							</SimpleGate> 
 							:
-							<UserCms apiAddress={apiAddress} otherRoutes={routes} />
+							<UserCms 
+								apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
+								userConfig={userCmsProps.userConfig}
+								otherRoutes={routes}
+							/>
 						}
 					</>
 				}
