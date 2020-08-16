@@ -1,7 +1,7 @@
 import * as React from "react";
 import axios, { AxiosResponse, AxiosError } from "axios"
 import { Cms, CmsHeader, CmsBody } from "./styled/cms";
-import { DangerAlert } from "./styled/alert";
+import { DangerAlert, SuccessAlert } from "./styled/alert";
 import { DangerButton, SuccessButton } from "./styled/button";
 import { slugify } from "../util";
 import { UserInfo, UserCmsProps, UserCmsState } from "../types";
@@ -17,6 +17,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	};
 
 	static defaultProps = {
+		apiRoute: "/cms/users",
 		userConfig: [
 			{
 				name: "First Name",
@@ -38,10 +39,9 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 		const self = this;
 		axios.get(apiRoute).then((resp: AxiosResponse) => {
 			const { data } = resp;
-
-			if(data.users && data.users.length >= 1){
+			if(data && data.length >= 1){
 				self.setState({
-					users: data.users
+					users: data
 				});
 			}
 		}).catch((err: AxiosError) => {
@@ -99,9 +99,11 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 							newPassword: resetPasswordPrompt
 						}
 					}).then((resp: AxiosResponse) => {
-						self.setState({
-							successMessage: "New Password set"
-						});
+						if(resp.status == 200){
+							self.setState({
+								successMessage: "New Password set"
+							});
+						}
 					}).catch((err: AxiosError) => {
 						self.setState({
 							errorMessage: `Error (${err.message})`
@@ -129,7 +131,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 
 	render(){
 		const { logo, otherRoutes, userConfig } = this.props;
-		const { users, errorMessage } = this.state;
+		const { users, errorMessage, successMessage } = this.state;
 		return (
 			<Cms className="cms-page">
 				<CmsHeader className="cms-header" logo={logo}>
@@ -155,6 +157,12 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 						<DangerAlert>
 							{errorMessage}
 						</DangerAlert>
+				}
+				{
+					successMessage &&
+						<SuccessAlert>
+							{successMessage}
+					</SuccessAlert>
 				}
 				<CmsBody className="cms-body">
 					<div className="user-table-content">

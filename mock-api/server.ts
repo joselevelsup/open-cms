@@ -78,7 +78,17 @@ export default () => {
 				return users;
 			});
 
-			this.delete("/user/:id", (schema: any, request: Request): Response => {
+			this.put("/users/:id", (schema: any, request: Request): Response => {
+				const user = schema.db.users.findById(request.params.id);
+				
+				if(user){
+					return new Response(200, {}, []);
+				} else {
+					return new Response(500, {}, []);
+				}
+			})
+
+			this.delete("/users/:id", (schema: any, request: Request): Response => {
 				const queriedUser: ModelInstance = schema.db.users.findById(request.params.id);
 
 				queriedUser.destroy();

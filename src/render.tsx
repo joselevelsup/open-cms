@@ -10,6 +10,6 @@ if(process.env.NODE_ENV == "development"){
 }
 
 ReactDom.render(
-		<OpenCms routes={[{ name: "home page", apiRoute: "/cms/home" }]} />
+	<OpenCms userCmsProps={{ access: true }} routes={[{ name: "home page", apiRoute: "/cms/home" }]} />
 	, document.getElementById("root"));
 

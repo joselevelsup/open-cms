@@ -26,8 +26,9 @@ export interface MainAppProps {
 	logo?: any;
 	components?: NewComponent[] | [];
 	userCmsProps?: {
-		userRoute: string,
-		userConfig: { 
+		access: boolean,
+		userRoute?: string,
+		userConfig?: { 
 			name: string,
 			key: string
 		}[]

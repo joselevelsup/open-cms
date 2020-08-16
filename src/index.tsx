@@ -13,82 +13,55 @@ function OpenCms({
 	logo = null,
 	apiAddress = "",
 	components = [],
-	userPage = true,
 	locked = true,
-	userCmsProps = { userConfig: [], userRoute: "/cms/users" },
+	userCmsProps = { access: false },
 	gateProps = { localCredentials: { username: "admin", password: "password" } }
 }: MainAppProps) {
 
 	let remappedRoutes = {};
 
 	for(let r in routes){
+		const cmsProps = {
+			otherRoutes: routes,
+			apiRoute: `${apiAddress}${routes[r].apiRoute}`,
+			logo,
+			customComponents: components
+		};
+
 		remappedRoutes[`/admin/${slugify(routes[r].name)}`] = () => (
 			<ThemeProvider theme={theme}>
 				{
 					locked ?
 					<SimpleGate {...gateProps}>
-						<CmsPage
-							otherRoutes={routes}
-							apiRoute={`${apiAddress}${routes[r].apiRoute}`}
-							logo={logo}
-							customComponents={components}
-						/>
+						<CmsPage {...cmsProps} />
 					</SimpleGate>
 					:
-					<CmsPage
-						otherRoutes={routes}
-						apiRoute={`${apiAddress}${routes[r].apiRoute}`}
-						logo={logo}
-						customComponents={components}
-					/>
+					<CmsPage {...cmsProps}/>
 				}
 			</ThemeProvider>
 		) 
 	}
 
-	if(userPage){
+	if(userCmsProps.access){
+		const userProps = {
+			...userCmsProps,
+			apiRoute: userCmsProps.userRoute && `${apiAddress}${userCmsProps.userRoute}`,
+			otherRoutes: routes
+		};
+
+		console.log(userProps);
 		remappedRoutes["/admin/users"] = () => (
 			<ThemeProvider theme={theme}>
-				{
-					userCmsProps && userCmsProps.userConfig.length >= 1 ?
-					<>
-						{
-							locked ?
-							<SimpleGate {...gateProps}>
-								<UserCms
-									apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
-									userConfig={userCmsProps.userConfig}
-									otherRoutes={routes}
-								/>
-							</SimpleGate>
-							:
-							<UserCms
-								apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
-								userConfig={userCmsProps.userConfig}
-								otherRoutes={routes}
-							/>
-						}
-					</>
-					:
-					<>
-						{
-							locked ?
-							<SimpleGate {...gateProps}>
-								<UserCms 
-									apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
-									userConfig={userCmsProps.userConfig}
-									otherRoutes={routes}
-								/>
-							</SimpleGate> 
-							:
-							<UserCms 
-								apiRoute={`${apiAddress}${userCmsProps.userRoute}`}
-								userConfig={userCmsProps.userConfig}
-								otherRoutes={routes}
-							/>
-						}
-					</>
-				}
+				<>
+					{
+						locked ?
+						<SimpleGate {...gateProps}>
+							<UserCms {...userProps}/>
+						</SimpleGate> 
+						:
+						<UserCms {...userProps}/>
+					}
+				</>
 			</ThemeProvider>
 		)
 	}
