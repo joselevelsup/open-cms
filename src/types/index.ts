@@ -28,6 +28,7 @@ export interface MainAppProps {
 	userCmsProps?: {
 		access: boolean,
 		userRoute?: string,
+		passwordResetRoute?: string,
 		userConfig?: { 
 			name: string,
 			key: string
@@ -113,6 +114,7 @@ export interface CmsPageState {
 export interface UserCmsProps extends BasePageProps {
 	otherRoutes?: [CmsRoute];
 	userConfig?: { name: string, key: string }[];
+	passwordResetRoute?: string;
 }
 
 export interface UserCmsState {

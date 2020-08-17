@@ -18,6 +18,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 
 	static defaultProps = {
 		apiRoute: "/cms/users",
+		passwordResetRoute: "/reset/password",
 		userConfig: [
 			{
 				name: "First Name",
@@ -64,11 +65,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 		const self = this;
 		let confirmDeleteUser = confirm("Are you sure you want to delete this user?");
 		if(confirmDeleteUser){
-			axios.delete(apiRoute, {
-				data: {
-					userId: id
-				}
-			}).then((resp: AxiosResponse) => {
+			axios.delete(`${apiRoute}/${id}`).then((resp: AxiosResponse) => {
 				if(resp.status == 200){
 					self.setState({
 						successMessage: "Successfully deleted User!"
@@ -76,6 +73,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 					self.retreiveUsers();
 				}
 			}).catch((err: AxiosError) => {
+				console.log(err);
 				self.setState({
 					errorMessage: `Error loading Users from ${apiRoute} (${err.message})`
 				});
@@ -84,7 +82,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 	}
 
 	sendResetPassword = (id: string | number) => {
-		const { apiRoute } = this.props;
+		const { apiRoute, passwordResetRoute } = this.props;
 		const self = this;
 
 		let confirmResetUserPass = confirm("Reset this User's password?");
@@ -92,39 +90,24 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 		if(confirmResetUserPass){
 			let resetPasswordPrompt = prompt("Enter new password (Leave empty if sending instructions)", "");
 			if(resetPasswordPrompt !== null){
-				if(resetPasswordPrompt.length >= 1){
-					axios.put(apiRoute, {
-						data: {
-							userId: id,
-							newPassword: resetPasswordPrompt
-						}
-					}).then((resp: AxiosResponse) => {
-						if(resp.status == 200){
-							self.setState({
-								successMessage: "New Password set"
-							});
-						}
-					}).catch((err: AxiosError) => {
+				const apiData: { newPassword: string | null } = {
+					newPassword: resetPasswordPrompt.length >= 1 ? resetPasswordPrompt : null
+				};
+
+				axios.put(`${apiRoute}/${id}${passwordResetRoute}`, {
+					data: apiData
+				}).then((resp: AxiosResponse) => {
+					console.log(resp);
+					if(resp.status == 200){
 						self.setState({
-							errorMessage: `Error (${err.message})`
+							successMessage: resp.data.message
 						});
+					}
+				}).catch((err: AxiosError) => {
+					self.setState({
+						errorMessage: `Error (${err.message})`
 					});
-				}
-				if(resetPasswordPrompt.length < 1){
-					axios.put(apiRoute, {
-						data: {
-							userId: id
-						}
-					}).then((resp: AxiosResponse) => {
-						self.setState({
-							successMessage: "User sent reset password instructions"
-						});
-					}).catch((err: AxiosError) => {
-						self.setState({
-							errorMessage: `Error (${err.message})`
-						});
-					});
-				}
+				});
 			}
 		}
 	}
@@ -162,7 +145,7 @@ export default class UserCms extends React.Component<UserCmsProps, UserCmsState>
 					successMessage &&
 						<SuccessAlert>
 							{successMessage}
-					</SuccessAlert>
+						</SuccessAlert>
 				}
 				<CmsBody className="cms-body">
 					<div className="user-table-content">

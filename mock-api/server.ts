@@ -6,7 +6,7 @@ function makeNewUsers(){
 		id: i, 
 		firstName: faker.name.firstName(),
 		lastName: faker.name.lastName(),
-		email: faker.internet.email()
+		email: faker.internet.email(),
 	}));
 
 	return newUsers;
@@ -78,22 +78,31 @@ export default () => {
 				return users;
 			});
 
-			this.put("/users/:id", (schema: any, request: Request): Response => {
-				const user = schema.db.users.findById(request.params.id);
+			this.put("/users/:id/reset/password", (schema: any, request: Request): Response => {
+				const body = JSON.parse(request.requestBody);
+				const user = schema.db.users.find(request.params.id);
 				
 				if(user){
-					return new Response(200, {}, []);
+					if(body.data.newPassword){
+						return new Response(200, {}, { message: "password reset" });
+					} else {
+						return new Response(200, {}, { message: "password reset email sent" });
+					}
 				} else {
 					return new Response(500, {}, []);
 				}
 			})
 
 			this.delete("/users/:id", (schema: any, request: Request): Response => {
-				const queriedUser: ModelInstance = schema.db.users.findById(request.params.id);
+				const user = schema.db.users.find(request.params.id);
 
-				queriedUser.destroy();
+				if(user){
+					schema.db.users.remove(request.params.id);
+					return new Response(200, {}, { message: "user deleted" });
+				} else {
+					return new Response(500, {}, {});
+				}
 
-				return new Response(200, {}, { message: "user deleted" });
 			});
 		}
 	})
