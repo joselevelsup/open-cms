@@ -13,13 +13,16 @@ Coming soon.
 
 ### Props
 
-| Prop Name  | Type               | Required? | Default               |
-|------------|--------------------|-----------|-----------------------|
-| routes     | array (see below)  | Yes       | none                  |
-| apiAddress | string             | No        | http://localhost:8080 |
-| theme      | object (see below) | No        | {}                    |
-| logo       | string             | No        | null                  |
-| components | array (see below)  | No        | []                    |
+| Prop Name		 | Type               | Required?							| Default               |
+|--------------|--------------------|-----------------------|-----------------------|
+| routes			 | array (see below)  | Yes										| none                  |
+| apiAddress	 | string             | No										| http://localhost:8080 |
+| theme				 | object (see below) | No										| {}                    |
+| logo				 | string             | No										| null                  |
+| components	 | array (see below)  | No										| []                    |
+| locked			 | boolean						| No										| false									|
+| userCmsProps | see below					| Only access attribute | { access: false }			|
+| gateProps		 | see [`react-gate-duo`](https://www.npmjs.com/package/react-gate-duo) | No                    | none                  |
 
 
 #### Routes
@@ -161,24 +164,32 @@ In order to view the data YOU want to see, you just need to provide an array of 
 
 This is needed to help generate a chart and pull in the data from your response from your API. The name is what displays in a chart format and the key is what goes into your data and pulls it out. 
 
+#### User CMS Props
+
+| Prop			         | Type														 | Description																							          | Default																																		 |
+|--------------------|---------------------------------|--------------------------------------------------------------------|----------------------------------------------------------------------------|
+| access						 | boolean												 | For the user cms page to be available															| false
+| userConfig				 | [{ name: string, key: string }] | An array of objects that help how user data is displayed           | ``[{ name: "First Name", key: "firstName" }, ...one for last name and email]`` |
+| userRoute					 | string													 | A route for the CMS to hit when getting, updating, and/or deleting | `/cms/users`																															 |
+| passwordResetRoute | string													 | A route for the CMS to use to reset a user's password							| `/reset/password`
+
 
 ## Locking the CMS
 
-If you wanted to make sure no one has access to the CMS there is an option for that. 
+If you wanted to make sure no one has access to the CMS there is an option for that. The CMS uses [`react-gate-duo`](https://www.npmjs.com/package/react-gate-duo) to gate off your CMS from anyone.
 
 ``` jsx
-  <OpenCms locked={true} credentials={{username: "administrator", password: "aSuperDuperPassword"}} />
+  <OpenCms 
+		locked={true} 
+		gateProps={{ // Refer to React Gate Duo props
+			credentials: {username: "administrator", password: "aSuperDuperPassword"} 
+		}}
+	/>
 ```
 
 | Prop        | Type    | Description                                        | Default                                              |
 |-------------|---------|----------------------------------------------------|------------------------------------------------------|
 | locked      | boolean | Tells the CMS that you want the pages to be locked | false                                                |
-| credentials | object  | You can put static username and password           |	`{ username: "admin", password: "password123" } `		 |
-|             |         |                                                    |                                                      |
-
-A login pane is already provided (for you to develop your own, that is coming soon!)
-
-Once you have successfully logged in, a `sessionId` and `sessionTime` is stored in your local storage. After 2 days or more, you will need to login once more. 
 
 
 ## What's left?
@@ -199,6 +210,7 @@ Well follow the table :P
 | This Readme                | :heavy_check_mark:  |																							|
 | User Admin Panel           |                     | :heavy_check_mark:														|
 | Lock Down Panel            |                     | :heavy_check_mark:														|
+| Screenshots								 | :heavy_check_mark:  |																							|
 
 
 
