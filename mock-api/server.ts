@@ -12,8 +12,9 @@ function makeNewUsers(){
 	return newUsers;
 }
 
-export default () => {
-	new Server({
+export default ({ environment = "development" }) => {
+	return new Server({
+		environment,
 		models: {
 			home: Model
 		},

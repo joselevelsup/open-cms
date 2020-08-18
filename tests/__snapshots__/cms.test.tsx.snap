@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CmsPage should render with only required props 1`] = `
+exports[`CmsPage CmsPage without API should render with only required props 1`] = `
 <styled.div
   className="cms-page"
 >

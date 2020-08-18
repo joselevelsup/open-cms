@@ -6,7 +6,7 @@ import OpenCms from "./";
 import mockApiServer from "../mock-api/server";
 
 if(process.env.NODE_ENV == "development"){
-	mockApiServer();
+	mockApiServer({ environment: "development" });
 }
 
 ReactDom.render(
