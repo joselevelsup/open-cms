@@ -84,6 +84,7 @@ export default class CmsPage extends React.Component<CmsPageProps, CmsPageState>
 		const self = this;
 
 		axios.get(apiRoute).then((resp: AxiosResponse) => {
+			console.log(resp);
 			const { data } = resp;
 			const remappedData = this.setComponentData(data);
 			self.setState({
