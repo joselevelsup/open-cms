@@ -8,7 +8,7 @@
     "build": "tsc --project tsconfig.json",
     "postbuild": "copyfiles --flat ./src/styles/index.scss ./build/styles",
     "dev": "parcel src/index.html",
-		"cypress": "cypress open"
+    "cypress": "cypress open"
   },
   "keywords": [
     "react",

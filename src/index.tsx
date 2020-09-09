@@ -49,7 +49,6 @@ function OpenCms({
 			otherRoutes: routes
 		};
 
-		console.log(userProps);
 		remappedRoutes["/admin/users"] = () => (
 			<ThemeProvider theme={theme}>
 				<>
