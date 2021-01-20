@@ -3,3 +3,4 @@ dist/
 .cache/
 *.org
 .log/
+.parcel-cache/

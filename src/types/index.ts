@@ -94,7 +94,12 @@ export interface UserInfo {
 // Page Types
 
 type BasePageProps = {
-	apiRoute?: string;
+	apiRoute?: string | {
+		get: string,
+		post: string,
+		put: string,
+		delete: string
+	};
 	logo?: any;
 }
 
@@ -117,10 +122,3 @@ export interface UserCmsProps extends BasePageProps {
 	passwordResetRoute?: string;
 }
 
-export interface UserCmsState {
-	deleteModal: boolean;
-	editModal: boolean;
-	users: UserInfo[];
-	errorMessage: string | null;
-	successMessage: string | null;
-}
